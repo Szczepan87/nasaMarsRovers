@@ -8,6 +8,6 @@ import retrofit2.http.Query
 
 interface NasaRoversApi {
 
-    @GET("/curiosity/photos")
-    fun getCuriosityPhotosBySol(@Query("sol") sol: Int): Call<Response<List<Photos>>>
+    @GET("curiosity/photos")
+    fun getCuriosityPhotosBySol(@Query("sol") sol: Int): Call<List<Photos>>
 }

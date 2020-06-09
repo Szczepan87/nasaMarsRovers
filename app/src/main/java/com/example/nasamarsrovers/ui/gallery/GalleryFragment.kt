@@ -25,6 +25,15 @@ class GalleryFragment : Fragment() {
         galleryViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
+        galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
+            // notify recycler list
+        })
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        galleryViewModel.updatePhotosList()
     }
 }
