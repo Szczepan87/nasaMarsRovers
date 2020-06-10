@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="photo"
             type="com.example.nasamarsrovers.model.Photo" />
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/photo_card_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
 
         <ImageView
             android:id="@+id/card_photo_imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            imageUrl="@{photo.imgSrc}"/>
+            app:imageUrl="@{photo.imgSrc}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

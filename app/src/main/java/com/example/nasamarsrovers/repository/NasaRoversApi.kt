@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface NasaRoversApi {
 
-    @GET("curiosity/photos?sol=1000&api_key=DEMO_KEY")
+    @GET("curiosity/photos?sol=1&api_key=F1jrnZRZ2bdZmfx19dfiSvZypHVYk2rgMohbwVBG")
     fun getCuriosityPhotosBySol(): Deferred<PhotosResponse>
 }

@@ -1,5 +1,6 @@
 package com.example.nasamarsrovers.utils
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,9 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
 
     fun updateList(list: List<Photo>) {
         photosList.clear()
+        Log.d("RECYCLER", "Adding to recycler list ${list.first()}")
         photosList.addAll(list)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotosViewHolder {
@@ -24,6 +27,7 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
 
     override fun onBindViewHolder(holder: PhotosViewHolder, position: Int) {
         holder.bind(photosList[position])
+        Log.d("RECYCLER", "Binding with ${photosList[position]}")
     }
 
     class PhotosViewHolder(private val binding: PhotoCardBinding) :
