@@ -1,13 +1,11 @@
 package com.example.nasamarsrovers.repository
 
-import com.example.nasamarsrovers.model.Photos
-import retrofit2.Call
-import retrofit2.Response
+import com.example.nasamarsrovers.model.PhotosResponse
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface NasaRoversApi {
 
-    @GET("curiosity/photos")
-    fun getCuriosityPhotosBySol(@Query("sol") sol: Int): Call<List<Photos>>
+    @GET("curiosity/photos?sol=1000&api_key=DEMO_KEY")
+    fun getCuriosityPhotosBySol(): Deferred<PhotosResponse>
 }

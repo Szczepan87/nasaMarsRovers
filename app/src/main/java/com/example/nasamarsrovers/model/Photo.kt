@@ -3,7 +3,7 @@ package com.example.nasamarsrovers.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Photos(
+data class Photo(
     @SerializedName("camera")
     val camera: Camera?,
     @SerializedName("earth_date")

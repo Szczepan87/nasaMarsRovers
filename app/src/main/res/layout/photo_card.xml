@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="photo"
+            type="com.example.nasamarsrovers.model.Photo" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/photo_card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/card_photo_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            imageUrl="@{photo.imgSrc}"/>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
