@@ -16,5 +16,11 @@
             android:id="@+id/spirit_drawer_item"
             android:checkable="true"
             android:title="Spirit" />
+
     </group>
+
+    <item
+        android:id="@+id/sol_drawer_item"
+        android:title="Sol"
+        />
 </menu>

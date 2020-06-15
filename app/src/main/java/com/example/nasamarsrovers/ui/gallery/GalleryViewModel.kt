@@ -10,21 +10,25 @@ import com.example.nasamarsrovers.repository.PhotosRepository
 import kotlinx.coroutines.launch
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
+    private val _currentRover = MutableLiveData<String>()
+    val currentRover: LiveData<String>
+        get() = _currentRover
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
-    }
-    val text: LiveData<String> = _text
+    val sol = MutableLiveData<Int>(0)
 
     private val _listOfPhotos = MutableLiveData<List<Photo>>()
     val listOfPhotos: LiveData<List<Photo>>
         get() = _listOfPhotos
 
     init {
-        repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it)})
+        repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
     }
 
     fun updatePhotosList() {
         viewModelScope.launch { repository.retrievePhotos() }
+    }
+
+    fun setCurrentRover(roverName: String) {
+        _currentRover.postValue(roverName)
     }
 }
