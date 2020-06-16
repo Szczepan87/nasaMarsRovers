@@ -23,4 +23,12 @@
         android:id="@+id/sol_drawer_item"
         android:title="Sol"
         />
+
+    <item
+        android:id="@+id/date_drawer_item"
+        android:title="Earth Date"/>
+
+    <item
+        android:id="@+id/camera_drawer_item"
+        android:title="Camera"/>
 </menu>

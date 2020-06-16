@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.menu.getItem(0).isChecked = true
         navView.setNavigationItemSelectedListener {
             return@setNavigationItemSelectedListener when (it.itemId) {
                 R.id.sol_drawer_item -> {

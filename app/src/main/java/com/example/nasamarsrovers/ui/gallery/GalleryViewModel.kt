@@ -8,10 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
+import com.example.nasamarsrovers.utils.CURIOSITY
 import kotlinx.coroutines.launch
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
-    private val _currentRover = MutableLiveData<String>()
+    private val _currentRover = MutableLiveData<String>(CURIOSITY)
     val currentRover: LiveData<String>
         get() = _currentRover
 
