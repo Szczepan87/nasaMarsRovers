@@ -1,5 +1,6 @@
 package com.example.nasamarsrovers.ui.gallery
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -22,10 +23,11 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
 
     init {
         repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
+        sol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${sol.value}") })
     }
 
     fun updatePhotosList() {
-        viewModelScope.launch { repository.retrievePhotos() }
+        viewModelScope.launch { repository.retrievePhotos(sol.value ?: 0) }
     }
 
     fun setCurrentRover(roverName: String) {

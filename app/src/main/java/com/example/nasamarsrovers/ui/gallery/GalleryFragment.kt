@@ -5,15 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
-import kotlinx.android.synthetic.main.app_bar_main.*
 import org.koin.android.ext.android.get
 
 class GalleryFragment : Fragment() {
@@ -30,8 +27,9 @@ class GalleryFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
         galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
             galleryRecyclerAdapter.updateList(it)
-            Log.d("GALLERY FRAGMENT", "Updating with ${it.first()}")
         })
+        galleryViewModel.sol.observe(viewLifecycleOwner, Observer { galleryViewModel.updatePhotosList()
+        Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS")})
         return binding.root
     }
 

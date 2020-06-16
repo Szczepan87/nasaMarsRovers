@@ -1,10 +1,6 @@
 package com.example.nasamarsrovers
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,7 +17,6 @@ import com.example.nasamarsrovers.ui.gallery.SolPicker
 import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
-import kotlinx.android.synthetic.main.app_bar_main.*
 import org.koin.android.ext.android.get
 
 class MainActivity : AppCompatActivity() {

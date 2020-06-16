@@ -13,12 +13,11 @@ class PhotosRepository(private val nasaRoversApi: NasaRoversApi) {
     val roverPhotos: LiveData<List<Photo>>
         get() = _roverPhotos
 
-    suspend fun retrievePhotos(){
-        val response = nasaRoversApi.getCuriosityPhotosBySol()
+    suspend fun retrievePhotos(sol: Int){
+        val response = nasaRoversApi.getCuriosityPhotosBySol(sol)
         withContext(Dispatchers.IO){
             val list: List<Photo> = response.await().photos ?: emptyList()
             _roverPhotos.postValue(list)
-            Log.d("REPOSITORY", "Updating with ${list.first()}")
         }
     }
 }

@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val viewModelModule = module {
-    viewModel { GalleryViewModel(get()) }
+    single { GalleryViewModel(get()) }
 }
 
 val repositoryModule = module {

@@ -13,7 +13,6 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
 
     fun updateList(list: List<Photo>) {
         photosList.clear()
-        Log.d("RECYCLER", "Adding to recycler list ${list.first()}")
         photosList.addAll(list)
         notifyDataSetChanged()
     }
