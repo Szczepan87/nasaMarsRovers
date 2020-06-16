@@ -8,12 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.DialogSolPickerBinding
-import org.koin.android.ext.android.get
 
-class SolPicker : DialogFragment() {
+class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment() {
 
     private lateinit var binding: DialogSolPickerBinding
-    private val galleryViewModel: GalleryViewModel = get()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +32,7 @@ class SolPicker : DialogFragment() {
                 galleryViewModel.sol.postValue(
                     editTextNumber.text.toString().toInt()
                 )
+                this@SolPicker.dismiss()
             }
         }
     }

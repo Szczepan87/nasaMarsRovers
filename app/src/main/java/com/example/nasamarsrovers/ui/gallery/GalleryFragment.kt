@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
+import kotlinx.android.synthetic.main.app_bar_main.*
 import org.koin.android.ext.android.get
 
 class GalleryFragment : Fragment() {
