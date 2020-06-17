@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.ui.gallery.SolPicker
 import com.example.nasamarsrovers.utils.CURIOSITY
@@ -41,33 +42,39 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-        navView.menu.getItem(0).isChecked = true
-        navView.setNavigationItemSelectedListener {
-            return@setNavigationItemSelectedListener when (it.itemId) {
-                R.id.sol_drawer_item -> {
-                    SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.curiosity_drawer_item -> {
-                    galleryViewModel.setCurrentRover(CURIOSITY)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.opportunity_drawer_item -> {
-                    galleryViewModel.setCurrentRover(OPPORTUNITY)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                R.id.spirit_drawer_item -> {
-                    galleryViewModel.setCurrentRover(SPIRIT)
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
-                }
-                else -> {
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    true
+        setUpNavView(navView, navController)
+    }
+
+    private fun setUpNavView(navView: NavigationView, navController: NavController) {
+        with(navView) {
+            setupWithNavController(navController)
+            menu.getItem(0).isChecked = true
+            setNavigationItemSelectedListener {
+                return@setNavigationItemSelectedListener when (it.itemId) {
+                    R.id.sol_drawer_item -> {
+                        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.curiosity_drawer_item -> {
+                        galleryViewModel.setCurrentRover(CURIOSITY)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.opportunity_drawer_item -> {
+                        galleryViewModel.setCurrentRover(OPPORTUNITY)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.spirit_drawer_item -> {
+                        galleryViewModel.setCurrentRover(SPIRIT)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    else -> {
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
                 }
             }
         }

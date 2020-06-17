@@ -28,8 +28,14 @@ class GalleryFragment : Fragment() {
         galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
             galleryRecyclerAdapter.updateList(it)
         })
-        galleryViewModel.sol.observe(viewLifecycleOwner, Observer { galleryViewModel.updatePhotosList()
-        Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS")})
+        galleryViewModel.sol.observe(viewLifecycleOwner, Observer {
+            galleryViewModel.updatePhotosList()
+            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF SOL CHANGE")
+        })
+        galleryViewModel.currentRover.observe(viewLifecycleOwner, Observer {
+            galleryViewModel.updatePhotosList()
+            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF ROVER CHANGE")
+        })
         return binding.root
     }
 
@@ -37,7 +43,7 @@ class GalleryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         galleryViewModel.updatePhotosList()
-        with(binding){
+        with(binding) {
             viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
         }

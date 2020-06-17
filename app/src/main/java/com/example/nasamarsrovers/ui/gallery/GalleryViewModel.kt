@@ -25,10 +25,16 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     init {
         repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
         sol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${sol.value}") })
+        sol.observeForever(Observer { Log.d("VIEW MODEL", "ROVER: ${currentRover.value}") })
     }
 
     fun updatePhotosList() {
-        viewModelScope.launch { repository.retrievePhotos(sol.value ?: 0) }
+        viewModelScope.launch {
+            repository.retrievePhotos(
+                currentRover.value ?: CURIOSITY,
+                sol.value ?: 0
+            )
+        }
     }
 
     fun setCurrentRover(roverName: String) {
