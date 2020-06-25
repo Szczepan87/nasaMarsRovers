@@ -1,4 +1,4 @@
-package com.example.nasamarsrovers.ui.gallery
+package com.example.nasamarsrovers.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.DialogSolPickerBinding
+import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 
 class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment() {
 
@@ -29,7 +30,7 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
             viewModel = galleryViewModel
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {
-                galleryViewModel.sol.postValue(
+                galleryViewModel.setSol(
                     editTextNumber.text.toString().toInt()
                 )
                 this@SolPicker.dismiss()

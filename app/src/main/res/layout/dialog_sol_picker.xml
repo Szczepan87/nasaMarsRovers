@@ -38,7 +38,7 @@
             android:layout_marginEnd="8dp"
             android:ems="4"
             android:inputType="number"
-            android:text="@{viewModel.sol.toString()}"
+            android:text="@{viewModel.currentSol.toString()}"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

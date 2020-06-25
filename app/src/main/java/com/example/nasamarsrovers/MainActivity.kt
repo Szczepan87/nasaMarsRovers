@@ -14,7 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
-import com.example.nasamarsrovers.ui.gallery.SolPicker
+import com.example.nasamarsrovers.ui.SolPicker
 import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
@@ -52,7 +52,9 @@ class MainActivity : AppCompatActivity() {
             setNavigationItemSelectedListener {
                 return@setNavigationItemSelectedListener when (it.itemId) {
                     R.id.sol_drawer_item -> {
-                        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
+                        SolPicker(
+                            galleryViewModel
+                        ).show(supportFragmentManager, "SOL_PICKER")
                         drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     }

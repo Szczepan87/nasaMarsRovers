@@ -28,13 +28,17 @@ class GalleryFragment : Fragment() {
         galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
             galleryRecyclerAdapter.updateList(it)
         })
-        galleryViewModel.sol.observe(viewLifecycleOwner, Observer {
+        galleryViewModel.currentSol.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
             Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF SOL CHANGE")
         })
         galleryViewModel.currentRover.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
             Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF ROVER CHANGE")
+        })
+        galleryViewModel.currentCamera.observe(viewLifecycleOwner, Observer {
+            galleryViewModel.updatePhotosList()
+            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF CAMERA CHANGE")
         })
         return binding.root
     }

@@ -16,7 +16,13 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     val currentRover: LiveData<String>
         get() = _currentRover
 
-    val sol = MutableLiveData<Int>(0)
+    private val _currentCamera = MutableLiveData<String>("")
+    val currentCamera: LiveData<String>
+        get() = _currentCamera
+
+    private val _currentSol = MutableLiveData<Int>(0)
+    val currentSol: LiveData<Int>
+        get() = _currentSol
 
     private val _listOfPhotos = MutableLiveData<List<Photo>>()
     val listOfPhotos: LiveData<List<Photo>>
@@ -24,20 +30,29 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
 
     init {
         repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
-        sol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${sol.value}") })
-        sol.observeForever(Observer { Log.d("VIEW MODEL", "ROVER: ${currentRover.value}") })
+        currentSol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${currentSol.value}") })
+        currentRover.observeForever(Observer {
+            Log.d(
+                "VIEW MODEL",
+                "ROVER: ${currentRover.value}"
+            )
+        })
     }
 
     fun updatePhotosList() {
         viewModelScope.launch {
             repository.retrievePhotos(
                 currentRover.value ?: CURIOSITY,
-                sol.value ?: 0
+                currentSol.value ?: 0
             )
         }
     }
 
     fun setCurrentRover(roverName: String) {
         _currentRover.postValue(roverName)
+    }
+
+    fun setSol(solNo: Int) {
+        _currentSol.postValue(solNo)
     }
 }
