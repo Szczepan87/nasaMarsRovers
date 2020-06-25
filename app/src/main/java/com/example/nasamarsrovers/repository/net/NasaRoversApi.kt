@@ -1,4 +1,4 @@
-package com.example.nasamarsrovers.repository
+package com.example.nasamarsrovers.repository.net
 
 import com.example.nasamarsrovers.model.PhotosResponse
 import com.example.nasamarsrovers.utils.API_KEY

@@ -3,7 +3,7 @@ package com.example.nasamarsrovers.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.nasamarsrovers.model.Photo
-import com.example.nasamarsrovers.model.Rover
+import com.example.nasamarsrovers.repository.net.NasaRoversApi
 import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
