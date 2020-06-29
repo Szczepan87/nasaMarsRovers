@@ -16,3 +16,10 @@ val CURIOSITY_CAMERAS = mapOf<String, CameraHardware>(
     Pair("MARDI", CameraHardware("Mars Descent Imager", "MARDI")),
     Pair("RHAZ", CameraHardware("Rear Hazard Avoidance Camera", "RHAZ"))
 )
+val SPIRIT_AND_OPPORTUNITY_CAMERAS = mapOf<String, CameraHardware>(
+    Pair("FHAZ", CameraHardware("Front Hazard Avoidance Camera", "FHAZ")),
+    Pair("RHAZ", CameraHardware("Rear Hazard Avoidance Camera", "RHAZ")),
+    Pair("NAVCAM", CameraHardware("Navigation Camera", "NAVCAM")),
+    Pair("PANCAM", CameraHardware("Panoramic Camera", "PANCAM")),
+    Pair("MINITES", CameraHardware("Miniature Thermal Emission Spectrometer (Mini-TES)", "MINITES"))
+)

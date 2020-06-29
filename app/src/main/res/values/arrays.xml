@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="curiosity_cameras">
+        <item>FHAZ\nFront Hazard Avoidance Camera</item>
+        <item>RHAZ\nRear Hazard Avoidance Camera</item>
+        <item>MAST\nMast Camera</item>
+        <item>CHEMCAM\nChemistry and Camera Complex</item>
+        <item>MAHLI\nMars Hand Lens Imager</item>
+        <item>MARDI\nMars Descent Imager</item>
+        <item>NAVCAM\nNavigation Camera</item>
+    </array>
+    <array name="spirit_and_opportunity_cameras">
+        <item>FHAZ\nFront Hazard Avoidance Camera</item>
+        <item>RHAZ\nRear Hazard Avoidance Camera</item>
+        <item>NAVCAM\nNavigation Camera</item>
+        <item>PANCAM\nPanoramic Camera</item>
+        <item>MINITES\nMiniature Thermal Emission Spectrometer (Mini-TES)</item>
+    </array>
+
+</resources>

@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import com.example.nasamarsrovers.ui.CameraPicker
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.ui.SolPicker
 import com.example.nasamarsrovers.utils.CURIOSITY
@@ -70,6 +71,11 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.spirit_drawer_item -> {
                         galleryViewModel.setCurrentRover(SPIRIT)
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.camera_drawer_item -> {
+                        CameraPicker().show(supportFragmentManager, "CAMERA_PICKER")
                         drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     }
