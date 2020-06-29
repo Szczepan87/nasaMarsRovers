@@ -55,4 +55,6 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     fun setSol(solNo: Int) {
         _currentSol.postValue(solNo)
     }
+
+    // TODO retrieve manifest data about max sol, date etc.
 }

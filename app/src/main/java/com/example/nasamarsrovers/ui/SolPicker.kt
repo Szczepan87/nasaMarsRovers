@@ -30,8 +30,7 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
             viewModel = galleryViewModel
             with(solNumberPicker) {
                 minValue = 0
-                maxValue = 1000
-                displayedValues = getSols()
+                maxValue = 2200
             }
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {
@@ -41,13 +40,5 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
                 this@SolPicker.dismiss()
             }
         }
-    }
-
-    private fun getSols(): Array<String> {
-        val mutableList = mutableListOf<String>()
-        for (number in 0..1000) {
-            mutableList.add(number.toString())
-        }
-        return mutableList.toTypedArray()
     }
 }

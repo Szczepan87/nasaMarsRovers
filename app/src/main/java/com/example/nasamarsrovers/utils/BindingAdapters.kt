@@ -23,16 +23,4 @@ object BindingAdapters {
     fun NumberPicker.bindValue(value: Int) {
         this.value = value
     }
-
-    @JvmStatic
-    @BindingAdapter("minValue")
-    fun NumberPicker.bindMinValue(minValue: Int) {
-        this.minValue = minValue
-    }
-
-    @JvmStatic
-    @BindingAdapter("maxValue")
-    fun NumberPicker.bindMaxValue(maxValue: Int) {
-        this.maxValue = maxValue
-    }
 }
