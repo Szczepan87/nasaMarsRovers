@@ -28,13 +28,26 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
 
         with(binding) {
             viewModel = galleryViewModel
+            with(solNumberPicker) {
+                minValue = 0
+                maxValue = 1000
+                displayedValues = getSols()
+            }
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {
                 galleryViewModel.setSol(
-                    editTextNumber.text.toString().toInt()
+                    solNumberPicker.value
                 )
                 this@SolPicker.dismiss()
             }
         }
+    }
+
+    private fun getSols(): Array<String> {
+        val mutableList = mutableListOf<String>()
+        for (number in 0..1000) {
+            mutableList.add(number.toString())
+        }
+        return mutableList.toTypedArray()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.nasamarsrovers.utils
 
 import android.widget.ImageView
+import android.widget.NumberPicker
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.nasamarsrovers.R
@@ -15,5 +16,23 @@ object BindingAdapters {
             .error(R.drawable.ic_baseline_error_outline_24)
             .placeholder(R.drawable.ic_baseline_camera_300)
             .into(this)
+    }
+
+    @JvmStatic
+    @BindingAdapter("value")
+    fun NumberPicker.bindValue(value: Int) {
+        this.value = value
+    }
+
+    @JvmStatic
+    @BindingAdapter("minValue")
+    fun NumberPicker.bindMinValue(minValue: Int) {
+        this.minValue = minValue
+    }
+
+    @JvmStatic
+    @BindingAdapter("maxValue")
+    fun NumberPicker.bindMaxValue(maxValue: Int) {
+        this.maxValue = maxValue
     }
 }
