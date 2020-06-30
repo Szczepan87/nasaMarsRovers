@@ -13,4 +13,6 @@
     <string name="sol_dialog_title">Select sol:</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="sol">Sol: %1$d</string>
+    <string name="earth_date">Earth date: %1$s</string>
 </resources>
