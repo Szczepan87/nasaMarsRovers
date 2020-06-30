@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         galleryViewModel.currentRover.observe(this, Observer { toolbar.title = it })
+        galleryViewModel.currentCamera.observe(this, Observer { toolbar.subtitle = "Camera: $it" })
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)

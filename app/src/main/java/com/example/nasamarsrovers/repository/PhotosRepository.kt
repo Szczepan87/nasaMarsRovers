@@ -16,11 +16,11 @@ class PhotosRepository(private val nasaRoversApi: NasaRoversApi) {
     val roverPhotos: LiveData<List<Photo>>
         get() = _roverPhotos
 
-    suspend fun retrievePhotos(roverName: String, sol: Int) {
+    suspend fun retrievePhotos(roverName: String, sol: Int, camera: String) {
         val response = when (roverName) {
-            CURIOSITY -> nasaRoversApi.getCuriosityPhotosBySol(sol)
-            OPPORTUNITY -> nasaRoversApi.getOpportunityPhotosBySol(sol)
-            SPIRIT -> nasaRoversApi.getSpiritPhotosBySol(sol)
+            CURIOSITY -> nasaRoversApi.getCuriosityPhotosBySolAndCamera(sol, camera)
+            OPPORTUNITY -> nasaRoversApi.getOpportunityPhotosBySolAndCamera(sol, camera)
+            SPIRIT -> nasaRoversApi.getSpiritPhotosBySolAndCamera(sol, camera)
             else -> nasaRoversApi.getCuriosityPhotosBySol(sol)
         }
 

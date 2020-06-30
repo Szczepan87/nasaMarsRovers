@@ -24,13 +24,13 @@ interface NasaRoversApi {
     ): Deferred<PhotosResponse>
 
     @GET("opportunity/photos?&api_key=$API_KEY")
-    fun getOpportunityPhotosBySol(
+    fun getOpportunityPhotosBySolAndCamera(
         @Query("sol") sol: Int,
         @Query("camera") camera: String
     ): Deferred<PhotosResponse>
 
     @GET("spirit/photos?&api_key=$API_KEY")
-    fun getSpiritPhotosBySol(
+    fun getSpiritPhotosBySolAndCamera(
         @Query("sol") sol: Int,
         @Query("camera") camera: String
     ): Deferred<PhotosResponse>

@@ -16,7 +16,7 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     val currentRover: LiveData<String>
         get() = _currentRover
 
-    private val _currentCamera = MutableLiveData<String>("")
+    private val _currentCamera = MutableLiveData<String>("FHAZ")
     val currentCamera: LiveData<String>
         get() = _currentCamera
 
@@ -44,7 +44,8 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         viewModelScope.launch {
             repository.retrievePhotos(
                 currentRover.value ?: CURIOSITY,
-                currentSol.value ?: 0
+                currentSol.value ?: 0,
+                currentCamera.value ?: "FHAZ"
             )
         }
     }
