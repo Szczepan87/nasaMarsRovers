@@ -37,6 +37,7 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                 "ROVER: ${currentRover.value}"
             )
         })
+        currentCamera.observeForever {Log.d("VIEW MODEl", "CAMERA: ${currentCamera.value}")}
     }
 
     fun updatePhotosList() {
@@ -54,6 +55,10 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
 
     fun setSol(solNo: Int) {
         _currentSol.postValue(solNo)
+    }
+
+    fun setCurrentCamera(currentCamera: String) {
+        _currentCamera.postValue(currentCamera)
     }
 
     // TODO retrieve manifest data about max sol, date etc.

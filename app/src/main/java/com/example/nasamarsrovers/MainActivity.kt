@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.camera_drawer_item -> {
-                        CameraPicker().show(supportFragmentManager, "CAMERA_PICKER")
+                        CameraPicker(galleryViewModel).show(supportFragmentManager, "CAMERA_PICKER")
                         drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     }
