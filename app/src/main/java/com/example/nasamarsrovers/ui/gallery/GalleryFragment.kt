@@ -32,6 +32,10 @@ class GalleryFragment : Fragment() {
             galleryViewModel.updatePhotosList()
             Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF SOL CHANGE")
         })
+        galleryViewModel.currentEarthDate.observe(viewLifecycleOwner, Observer {
+            galleryViewModel.updatePhotosList()
+            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF EARTH DATE CHANGE")
+        })
         galleryViewModel.currentRover.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
             Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF ROVER CHANGE")

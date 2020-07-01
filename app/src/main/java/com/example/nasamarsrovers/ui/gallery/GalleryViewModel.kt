@@ -10,6 +10,7 @@ import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.CURIOSITY
 import kotlinx.coroutines.launch
+import java.util.*
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     private val _currentRover = MutableLiveData<String>(CURIOSITY)
@@ -23,6 +24,10 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     private val _currentSol = MutableLiveData<Int>(0)
     val currentSol: LiveData<Int>
         get() = _currentSol
+
+    private val _currentEarthDate = MutableLiveData<Date>()
+    val currentEarthDate: LiveData<Date>
+        get() = _currentEarthDate
 
     private val _listOfPhotos = MutableLiveData<List<Photo>>()
     val listOfPhotos: LiveData<List<Photo>>
@@ -63,4 +68,5 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     }
 
     // TODO retrieve manifest data about max sol, date etc.
+    // TODO prep logic for getting data depending on sol or earth date
 }

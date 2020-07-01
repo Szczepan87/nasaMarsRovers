@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.nasamarsrovers.ui.CameraPicker
+import com.example.nasamarsrovers.ui.DatePickerDialog
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.ui.SolPicker
 import com.example.nasamarsrovers.utils.CURIOSITY
@@ -73,6 +74,13 @@ class MainActivity : AppCompatActivity() {
                     R.id.spirit_drawer_item -> {
                         galleryViewModel.setCurrentRover(SPIRIT)
                         drawerLayout.closeDrawer(GravityCompat.START)
+                        true
+                    }
+                    R.id.date_drawer_item -> {
+                        DatePickerDialog(galleryViewModel).show(
+                            supportFragmentManager,
+                            "EARTH_DATE_DIALOG"
+                        )
                         true
                     }
                     R.id.camera_drawer_item -> {
