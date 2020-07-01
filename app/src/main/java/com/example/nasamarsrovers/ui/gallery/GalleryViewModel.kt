@@ -46,6 +46,7 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     }
 
     fun updatePhotosList() {
+        // TODO prep logic for getting data depending on sol or earth date
         viewModelScope.launch {
             repository.retrievePhotos(
                 currentRover.value ?: CURIOSITY,
@@ -67,6 +68,9 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         _currentCamera.postValue(currentCamera)
     }
 
+    fun setEarthDate(date: Date) {
+        _currentEarthDate.postValue(date)
+    }
+
     // TODO retrieve manifest data about max sol, date etc.
-    // TODO prep logic for getting data depending on sol or earth date
 }

@@ -24,6 +24,6 @@ class DatePickerDialog(private val galleryViewModel: GalleryViewModel) : DialogF
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         calendar.set(year,month,dayOfMonth)
-        TODO("Not yet implemented")
+        galleryViewModel.setEarthDate(calendar.time)
     }
 }

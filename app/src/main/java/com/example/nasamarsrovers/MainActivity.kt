@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                             supportFragmentManager,
                             "EARTH_DATE_DIALOG"
                         )
+                        drawerLayout.closeDrawer(GravityCompat.START)
                         true
                     }
                     R.id.camera_drawer_item -> {
