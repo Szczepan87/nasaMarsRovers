@@ -3,9 +3,11 @@ package com.example.nasamarsrovers.ui
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
+import com.example.nasamarsrovers.utils.DATE_FORMAT
 import java.util.*
 
 class DatePickerDialog(private val galleryViewModel: GalleryViewModel) : DialogFragment(),
@@ -24,6 +26,9 @@ class DatePickerDialog(private val galleryViewModel: GalleryViewModel) : DialogF
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         calendar.set(year,month,dayOfMonth)
-        galleryViewModel.setEarthDate(calendar.time)
+        galleryViewModel.isEarthDateUsed = true
+        Log.d("DATE PICKER", "EARTH DATE USED: ${galleryViewModel.isEarthDateUsed}")
+
+        galleryViewModel.setEarthDate(DATE_FORMAT.format(calendar.time))
     }
 }

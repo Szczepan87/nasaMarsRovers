@@ -29,4 +29,18 @@ class PhotosRepository(private val nasaRoversApi: NasaRoversApi) {
             _roverPhotos.postValue(list)
         }
     }
+
+    suspend fun retrievePhotos(roverName: String, date: String, camera: String) {
+        val response = when (roverName) {
+            CURIOSITY -> nasaRoversApi.getCuriosityPhotosByDateAndCamera(date, camera)
+            OPPORTUNITY -> nasaRoversApi.getOpportunityPhotosByDateAndCamera(date, camera)
+            SPIRIT -> nasaRoversApi.getSpiritPhotosByDateAndCamera(date, camera)
+            else -> nasaRoversApi.getCuriosityPhotosBySol(0)
+        }
+
+        withContext(Dispatchers.IO) {
+            val list: List<Photo> = response.await().photos ?: emptyList()
+            _roverPhotos.postValue(list)
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.nasamarsrovers.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,8 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
             }
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {
+                galleryViewModel.isEarthDateUsed = false
+                Log.d("SOL PICKER", "EARH DATE USED: ${galleryViewModel.isEarthDateUsed}")
                 galleryViewModel.setSol(
                     solNumberPicker.value
                 )

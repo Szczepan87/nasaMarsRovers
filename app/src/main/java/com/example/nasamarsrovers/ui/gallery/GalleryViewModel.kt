@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.CURIOSITY
+import com.example.nasamarsrovers.utils.DATE_FORMAT
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -25,13 +26,15 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     val currentSol: LiveData<Int>
         get() = _currentSol
 
-    private val _currentEarthDate = MutableLiveData<Date>()
-    val currentEarthDate: LiveData<Date>
+    private val _currentEarthDate = MutableLiveData<String>()
+    val currentEarthDate: LiveData<String>
         get() = _currentEarthDate
 
     private val _listOfPhotos = MutableLiveData<List<Photo>>()
     val listOfPhotos: LiveData<List<Photo>>
         get() = _listOfPhotos
+
+    var isEarthDateUsed = false
 
     init {
         repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
@@ -42,17 +45,25 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                 "ROVER: ${currentRover.value}"
             )
         })
-        currentCamera.observeForever {Log.d("VIEW MODEl", "CAMERA: ${currentCamera.value}")}
+        currentCamera.observeForever { Log.d("VIEW MODEl", "CAMERA: ${currentCamera.value}") }
+        currentEarthDate.observeForever { Log.d("VIEW MODEl", "DATE: ${currentEarthDate.value}") }
     }
 
     fun updatePhotosList() {
-        // TODO prep logic for getting data depending on sol or earth date
         viewModelScope.launch {
-            repository.retrievePhotos(
-                currentRover.value ?: CURIOSITY,
-                currentSol.value ?: 0,
-                currentCamera.value ?: "FHAZ"
-            )
+            if (isEarthDateUsed) {
+                repository.retrievePhotos(
+                    currentRover.value ?: CURIOSITY,
+                    currentEarthDate.value ?: "2012-08-06",
+                    currentCamera.value ?: "FHAZ"
+                )
+            } else {
+                repository.retrievePhotos(
+                    currentRover.value ?: CURIOSITY,
+                    currentSol.value ?: 0,
+                    currentCamera.value ?: "FHAZ"
+                )
+            }
         }
     }
 
@@ -68,7 +79,7 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         _currentCamera.postValue(currentCamera)
     }
 
-    fun setEarthDate(date: Date) {
+    fun setEarthDate(date: String) {
         _currentEarthDate.postValue(date)
     }
 

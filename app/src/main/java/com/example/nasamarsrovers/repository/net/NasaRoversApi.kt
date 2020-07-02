@@ -34,4 +34,22 @@ interface NasaRoversApi {
         @Query("sol") sol: Int,
         @Query("camera") camera: String
     ): Deferred<PhotosResponse>
+
+    @GET("curiosity/photos?&api_key=$API_KEY")
+    fun getCuriosityPhotosByDateAndCamera(
+        @Query("earth_date") date: String,
+        @Query("camera") camera: String
+    ): Deferred<PhotosResponse>
+
+    @GET("opportunity/photos?&api_key=$API_KEY")
+    fun getOpportunityPhotosByDateAndCamera(
+        @Query("earth_date") date: String,
+        @Query("camera") camera: String
+    ): Deferred<PhotosResponse>
+
+    @GET("spirit/photos?&api_key=$API_KEY")
+    fun getSpiritPhotosByDateAndCamera(
+        @Query("earth_date") date: String,
+        @Query("camera") camera: String
+    ): Deferred<PhotosResponse>
 }

@@ -1,6 +1,7 @@
 package com.example.nasamarsrovers.utils
 
 import com.example.nasamarsrovers.model.CameraHardware
+import java.text.SimpleDateFormat
 
 const val API_KEY = "F1jrnZRZ2bdZmfx19dfiSvZypHVYk2rgMohbwVBG"
 const val BASE_URL = "https://api.nasa.gov/mars-photos/api/v1/rovers/"
@@ -23,3 +24,5 @@ val SPIRIT_AND_OPPORTUNITY_CAMERAS = mapOf<String, CameraHardware>(
     Pair("PANCAM", CameraHardware("Panoramic Camera", "PANCAM")),
     Pair("MINITES", CameraHardware("Miniature Thermal Emission Spectrometer (Mini-TES)", "MINITES"))
 )
+
+val DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd")
