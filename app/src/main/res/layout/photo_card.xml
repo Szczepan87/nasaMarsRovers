@@ -22,7 +22,7 @@
         <ImageView
             android:id="@+id/card_photo_imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             app:imageUrl="@{photo.imgSrc}"
             android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
