@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.nasamarsrovers.R
+import com.example.nasamarsrovers.utils.glide.GlideImageLoader
 
 object BindingAdapters {
 

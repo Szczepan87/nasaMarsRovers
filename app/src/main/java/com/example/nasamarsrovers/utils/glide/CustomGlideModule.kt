@@ -1,4 +1,4 @@
-package com.example.nasamarsrovers.utils
+package com.example.nasamarsrovers.utils.glide
 
 import android.content.Context
 import com.bumptech.glide.Glide
@@ -18,14 +18,20 @@ class CustomGlideModule : AppGlideModule() {
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
+        super.registerComponents(context, glide, registry)
+
         val builder = OkHttpClient.Builder()
         builder.readTimeout(30, TimeUnit.SECONDS)
         builder.writeTimeout(30, TimeUnit.SECONDS)
         builder.connectTimeout(30, TimeUnit.SECONDS)
-        registry.append(
-            GlideUrl::class.java,
-            InputStream::class.java,
-            OkHttpUrlLoader.Factory(builder.build())
-        )
+        builder.addNetworkInterceptor { chain ->
+            val request = chain.request()
+            val response = chain.proceed(request)
+            val listener = DispatchingProgressManager()
+            response.newBuilder()
+                .body(OkHttpProgressResponseBody(request.url(), response.body()!!, listener))
+                .build()
+        }
+        glide.registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(builder.build()))
     }
 }
