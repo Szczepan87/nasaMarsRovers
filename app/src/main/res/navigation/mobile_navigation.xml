@@ -7,6 +7,18 @@
     <fragment
         android:id="@+id/galleryFragment"
         android:name="com.example.nasamarsrovers.ui.gallery.GalleryFragment"
-        android:label="fragment_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_gallery">
+        <action
+            android:id="@+id/action_galleryFragment_to_photoFragment"
+            app:destination="@id/photoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.example.nasamarsrovers.ui.PhotoFragment"
+        tools:layout="@layout/fragment_photo">
+        <argument
+            android:name="photoUrl"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

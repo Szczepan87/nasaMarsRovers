@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
@@ -54,6 +55,10 @@ class GalleryFragment : Fragment() {
         with(binding) {
             viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
+            galleryRecyclerAdapter.onItemClickListener = {
+                val action = GalleryFragmentDirections.actionGalleryFragmentToPhotoFragment(it)
+                findNavController().navigate(action)
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.photo_card.view.*
 class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosViewHolder>() {
 
     private val photosList = mutableListOf<Photo>()
+    var onItemClickListener: ((String?) -> Unit)? = null
 
     fun updateList(list: List<Photo>) {
         photosList.clear()
@@ -31,7 +32,7 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
         Log.d("RECYCLER", "Binding with ${photosList[position]}")
     }
 
-    class PhotosViewHolder(private val binding: PhotoCardBinding) :
+    inner class PhotosViewHolder(private val binding: PhotoCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private var glideImageLoader: GlideImageLoader? = null
@@ -40,6 +41,7 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
             binding.photo = photo
             glideImageLoader = GlideImageLoader(binding.cardPhotoImageView, binding.photoCardProgressBar)
             glideImageLoader?.load(photo.imgSrc.toString())
+            binding.photoCardLayout.setOnClickListener { onItemClickListener?.invoke(photo.imgSrc) }
         }
     }
 }
