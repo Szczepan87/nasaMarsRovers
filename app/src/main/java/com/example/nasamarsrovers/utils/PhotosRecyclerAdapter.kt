@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasamarsrovers.databinding.PhotoCardBinding
 import com.example.nasamarsrovers.model.Photo
+import kotlinx.android.synthetic.main.nav_header_main.view.*
+import kotlinx.android.synthetic.main.photo_card.view.*
 
 class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosViewHolder>() {
 
@@ -32,8 +34,12 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
     class PhotosViewHolder(private val binding: PhotoCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private var glideImageLoader: GlideImageLoader? = null
+
         fun bind(photo: Photo) {
             binding.photo = photo
+            glideImageLoader = GlideImageLoader(binding.cardPhotoImageView, binding.photoCardProgressBar)
+            glideImageLoader?.load(photo.imgSrc.toString())
         }
     }
 }
