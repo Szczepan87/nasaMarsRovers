@@ -16,31 +16,92 @@ class PhotosRepository(private val nasaRoversApi: NasaRoversApi) {
     val roverPhotos: LiveData<List<Photo>>
         get() = _roverPhotos
 
+    private val _repositoryError = MutableLiveData<String?>().apply {
+        value = null
+    }
+    val repositoryError: LiveData<String?>
+        get() = _repositoryError
+
     suspend fun retrievePhotos(roverName: String, sol: Int, camera: String) {
         val response = when (roverName) {
-            CURIOSITY -> nasaRoversApi.getCuriosityPhotosBySolAndCamera(sol, camera)
-            OPPORTUNITY -> nasaRoversApi.getOpportunityPhotosBySolAndCamera(sol, camera)
-            SPIRIT -> nasaRoversApi.getSpiritPhotosBySolAndCamera(sol, camera)
-            else -> nasaRoversApi.getCuriosityPhotosBySol(sol)
+            CURIOSITY ->
+                safeApiCall(Dispatchers.IO) {
+                    nasaRoversApi.getCuriosityPhotosBySolAndCamera(sol, camera)
+                }
+            OPPORTUNITY ->
+                safeApiCall(Dispatchers.IO) {
+                    nasaRoversApi.getOpportunityPhotosBySolAndCamera(sol, camera)
+                }
+            SPIRIT ->
+                safeApiCall(
+                    Dispatchers.IO
+                ) {
+                    nasaRoversApi.getSpiritPhotosBySolAndCamera(sol, camera)
+                }
+            else -> safeApiCall(Dispatchers.IO) { nasaRoversApi.getCuriosityPhotosBySol(sol) }
         }
 
         withContext(Dispatchers.IO) {
-            val list: List<Photo> = response.await().photos ?: emptyList()
-            _roverPhotos.postValue(list)
+
+            var list: List<Photo> = emptyList()
+            when (response) {
+                is ApiResponseWrapper.Success -> {
+                    list = response.value.await().body()?.photos ?: emptyList()
+                    _roverPhotos.postValue(list)
+                    _repositoryError.postValue(null)
+                }
+                is ApiResponseWrapper.GeneralError -> {
+                    _roverPhotos.postValue(list)
+                    _repositoryError.postValue(response.errorMessage)
+                }
+                is ApiResponseWrapper.NetworkError -> {
+                    _roverPhotos.postValue(list)
+                    _repositoryError.postValue("${response.code}: ${response.errorMessage}")
+                }
+            }
         }
     }
 
     suspend fun retrievePhotos(roverName: String, date: String, camera: String) {
         val response = when (roverName) {
-            CURIOSITY -> nasaRoversApi.getCuriosityPhotosByDateAndCamera(date, camera)
-            OPPORTUNITY -> nasaRoversApi.getOpportunityPhotosByDateAndCamera(date, camera)
-            SPIRIT -> nasaRoversApi.getSpiritPhotosByDateAndCamera(date, camera)
-            else -> nasaRoversApi.getCuriosityPhotosBySol(0)
+            CURIOSITY -> safeApiCall(Dispatchers.IO) {
+                nasaRoversApi.getCuriosityPhotosByDateAndCamera(
+                    date,
+                    camera
+                )
+            }
+            OPPORTUNITY -> safeApiCall(Dispatchers.IO) {
+                nasaRoversApi.getOpportunityPhotosByDateAndCamera(
+                    date,
+                    camera
+                )
+            }
+            SPIRIT -> safeApiCall(Dispatchers.IO) {
+                nasaRoversApi.getSpiritPhotosByDateAndCamera(
+                    date,
+                    camera
+                )
+            }
+            else -> safeApiCall(Dispatchers.IO) { nasaRoversApi.getCuriosityPhotosBySol(0) }
         }
 
         withContext(Dispatchers.IO) {
-            val list: List<Photo> = response.await().photos ?: emptyList()
-            _roverPhotos.postValue(list)
+            var list: List<Photo> = emptyList()
+            when (response) {
+                is ApiResponseWrapper.Success -> {
+                    list = response.value.await().body()?.photos ?: emptyList()
+                    _roverPhotos.postValue(list)
+                    _repositoryError.postValue(null)
+                }
+                is ApiResponseWrapper.GeneralError -> {
+                    _roverPhotos.postValue(list)
+                    _repositoryError.postValue(response.errorMessage)
+                }
+                is ApiResponseWrapper.NetworkError -> {
+                    _roverPhotos.postValue(list)
+                    _repositoryError.postValue("${response.code}: ${response.errorMessage}")
+                }
+            }
         }
     }
 }

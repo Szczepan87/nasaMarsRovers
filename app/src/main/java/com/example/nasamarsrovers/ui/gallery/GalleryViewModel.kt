@@ -34,10 +34,16 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     val listOfPhotos: LiveData<List<Photo>>
         get() = _listOfPhotos
 
+    private val _repositoryError = MutableLiveData<String?>().apply {
+        value = null }
+    val repositoryError: LiveData<String?>
+        get() = _repositoryError
+
     var isEarthDateUsed = false
 
     init {
         repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
+        repository.repositoryError.observeForever { _repositoryError.postValue(it) }
         currentSol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${currentSol.value}") })
         currentRover.observeForever(Observer {
             Log.d(
