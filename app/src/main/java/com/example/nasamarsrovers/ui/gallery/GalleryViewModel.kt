@@ -14,15 +14,15 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
-    private val _currentRover = MutableLiveData<String>(CURIOSITY)
+    private val _currentRover = MutableLiveData<String>()
     val currentRover: LiveData<String>
         get() = _currentRover
 
-    private val _currentCamera = MutableLiveData<String>("FHAZ")
+    private val _currentCamera = MutableLiveData<String>()
     val currentCamera: LiveData<String>
         get() = _currentCamera
 
-    private val _currentSol = MutableLiveData<Int>(0)
+    private val _currentSol = MutableLiveData<Int>()
     val currentSol: LiveData<Int>
         get() = _currentSol
 
