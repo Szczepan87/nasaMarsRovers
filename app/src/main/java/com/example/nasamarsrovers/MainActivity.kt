@@ -31,11 +31,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setUpToolbarBehaviour()
+
+        setUpNavView()
+    }
+
+    private fun setUpToolbarBehaviour() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        toolbar.title = CURIOSITY
+        toolbar.subtitle = "Camera: FHAZ"
         galleryViewModel.currentRover.observe(this, Observer { toolbar.title = it })
         galleryViewModel.currentCamera.observe(this, Observer { toolbar.subtitle = "Camera: $it" })
+    }
 
+    private fun setUpNavView() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -45,10 +55,10 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        setUpNavView(navView, navController)
+        setUpMenuItems(navView, navController)
     }
 
-    private fun setUpNavView(navView: NavigationView, navController: NavController) {
+    private fun setUpMenuItems(navView: NavigationView, navController: NavController) {
         with(navView) {
             setupWithNavController(navController)
             menu.getItem(0).isChecked = true
