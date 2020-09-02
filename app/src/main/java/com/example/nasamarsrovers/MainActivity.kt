@@ -21,11 +21,12 @@ import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val galleryViewModel: GalleryViewModel = get()
+    private val galleryViewModel: GalleryViewModel by inject()
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +40,11 @@ class MainActivity : AppCompatActivity() {
     private fun setUpToolbarBehaviour() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        toolbar.title = CURIOSITY
-        toolbar.subtitle = "Camera: FHAZ"
-        galleryViewModel.currentRover.observe(this, Observer { toolbar.title = it })
-        galleryViewModel.currentCamera.observe(this, Observer { toolbar.subtitle = "Camera: $it" })
+
+        supportActionBar?.title = CURIOSITY
+        supportActionBar?.subtitle = "Camera: FHAZ"
+        galleryViewModel.currentRover.observe(this, Observer { supportActionBar?.title = it })
+        galleryViewModel.currentCamera.observe(this, Observer { supportActionBar?.subtitle = "Camera: $it" })
     }
 
     private fun setUpNavView() {

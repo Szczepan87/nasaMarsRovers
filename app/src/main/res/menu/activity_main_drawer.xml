@@ -7,28 +7,28 @@
         <item
             android:id="@+id/curiosity_drawer_item"
             android:checkable="true"
-            android:title="Curiosity" />
+            android:title="@string/curiosity" />
         <item
             android:id="@+id/opportunity_drawer_item"
             android:checkable="true"
-            android:title="Opportunity" />
+            android:title="@string/opportunity" />
         <item
             android:id="@+id/spirit_drawer_item"
             android:checkable="true"
-            android:title="Spirit" />
+            android:title="@string/spirit" />
 
     </group>
 
     <item
         android:id="@+id/sol_drawer_item"
-        android:title="Sol"
+        android:title="@string/sol"
         />
 
     <item
         android:id="@+id/date_drawer_item"
-        android:title="Earth Date"/>
+        android:title="@string/earth_date"/>
 
     <item
         android:id="@+id/camera_drawer_item"
-        android:title="Camera"/>
+        android:title="@string/camera"/>
 </menu>

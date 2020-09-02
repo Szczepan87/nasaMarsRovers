@@ -14,10 +14,11 @@ import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 
 class GalleryFragment : Fragment() {
 
-    private val galleryViewModel: GalleryViewModel = get()
+    private val galleryViewModel: GalleryViewModel by inject()
     private lateinit var binding: FragmentGalleryBinding
     private val galleryRecyclerAdapter = PhotosRecyclerAdapter()
 
@@ -27,6 +28,25 @@ class GalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
+        setUpObservers()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        galleryViewModel.updatePhotosList()
+        with(binding) {
+            viewModel = galleryViewModel
+            galleryRecycler.adapter = galleryRecyclerAdapter
+            galleryRecyclerAdapter.onItemClickListener = {
+                val action = GalleryFragmentDirections.actionGalleryFragmentToPhotoFragment(it)
+                findNavController().navigate(action)
+            }
+        }
+    }
+
+    private fun setUpObservers() {
         galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
             galleryRecyclerAdapter.updateList(it)
         })
@@ -51,20 +71,5 @@ class GalleryFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         })
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        galleryViewModel.updatePhotosList()
-        with(binding) {
-            viewModel = galleryViewModel
-            galleryRecycler.adapter = galleryRecyclerAdapter
-            galleryRecyclerAdapter.onItemClickListener = {
-                val action = GalleryFragmentDirections.actionGalleryFragmentToPhotoFragment(it)
-                findNavController().navigate(action)
-            }
-        }
     }
 }

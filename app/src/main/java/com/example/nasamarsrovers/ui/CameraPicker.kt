@@ -15,7 +15,7 @@ class CameraPicker(private val galleryViewModel: GalleryViewModel) : DialogFragm
 
         val currentRover = galleryViewModel.currentRover.value
         val cameraArray =
-            if (currentRover == CURIOSITY) resources.getStringArray(R.array.curiosity_cameras)
+            if (currentRover == CURIOSITY || currentRover == null) resources.getStringArray(R.array.curiosity_cameras)
             else resources.getStringArray(R.array.spirit_and_opportunity_cameras)
 
         val builder = AlertDialog.Builder(requireActivity())
