@@ -55,6 +55,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
+    // Paging library
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+
     // Koin for Android
     implementation "org.koin:koin-android:$koin_version"
     // or Koin for Lifecycle scoping

@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface NasaRoversApi {
 
     @GET("curiosity/photos?&page=1&api_key=$API_KEY")
-    fun getCuriosityPhotosBySol(@Query("sol") sol: Int): Deferred<Response<PhotosResponse>>
+    suspend fun getCuriosityPhotosBySol(@Query("sol") sol: Int): PhotosResponse
 
     @GET("opportunity/photos?&page=1&api_key=$API_KEY")
     fun getOpportunityPhotosBySol(@Query("sol") sol: Int): Deferred<PhotosResponse>
@@ -19,38 +19,38 @@ interface NasaRoversApi {
     fun getSpiritPhotosBySol(@Query("sol") sol: Int): Deferred<PhotosResponse>
 
     @GET("curiosity/photos?&api_key=$API_KEY")
-    fun getCuriosityPhotosBySolAndCamera(
+    suspend fun getCuriosityPhotosBySolAndCamera(
         @Query("sol") sol: Int,
         @Query("camera") camera: String
-    ): Deferred<Response<PhotosResponse>>
+    ): PhotosResponse
 
     @GET("opportunity/photos?&api_key=$API_KEY")
-    fun getOpportunityPhotosBySolAndCamera(
+    suspend fun getOpportunityPhotosBySolAndCamera(
         @Query("sol") sol: Int,
         @Query("camera") camera: String
-    ): Deferred<Response<PhotosResponse>>
+    ): PhotosResponse
 
     @GET("spirit/photos?&api_key=$API_KEY")
-    fun getSpiritPhotosBySolAndCamera(
+    suspend fun getSpiritPhotosBySolAndCamera(
         @Query("sol") sol: Int,
         @Query("camera") camera: String
-    ): Deferred<Response<PhotosResponse>>
+    ): PhotosResponse
 
     @GET("curiosity/photos?&api_key=$API_KEY")
-    fun getCuriosityPhotosByDateAndCamera(
+    suspend fun getCuriosityPhotosByDateAndCamera(
         @Query("earth_date") date: String,
         @Query("camera") camera: String
-    ): Deferred<Response<PhotosResponse>>
+    ): PhotosResponse
 
     @GET("opportunity/photos?&api_key=$API_KEY")
-    fun getOpportunityPhotosByDateAndCamera(
+    suspend fun getOpportunityPhotosByDateAndCamera(
         @Query("earth_date") date: String,
         @Query("camera") camera: String
-    ): Deferred<Response<PhotosResponse>>
+    ): PhotosResponse
 
     @GET("spirit/photos?&api_key=$API_KEY")
-    fun getSpiritPhotosByDateAndCamera(
+    suspend fun getSpiritPhotosByDateAndCamera(
         @Query("earth_date") date: String,
         @Query("camera") camera: String
-    ): Deferred<Response<PhotosResponse>>
+    ): PhotosResponse
 }

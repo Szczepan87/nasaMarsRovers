@@ -10,6 +10,9 @@ import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.DATE_FORMAT
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -43,7 +46,6 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
 
     init {
         repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
-        repository.repositoryError.observeForever { _repositoryError.postValue(it) }
         currentSol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${currentSol.value}") })
         currentRover.observeForever(Observer {
             Log.d(
@@ -58,17 +60,26 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     fun updatePhotosList() {
         viewModelScope.launch {
             if (isEarthDateUsed) {
-                repository.retrievePhotos(
+                repository.getPhotosFlow(
                     currentRover.value ?: CURIOSITY,
                     currentEarthDate.value ?: "2012-08-06",
                     currentCamera.value ?: "FHAZ"
                 )
+                    .onStart { // info about loading
+                    }
+                    .catch { error -> _repositoryError.postValue(error.message) }
+                    .collect { list -> _listOfPhotos.postValue(list) }
             } else {
-                repository.retrievePhotos(
+                repository.getPhotosFlow(
                     currentRover.value ?: CURIOSITY,
                     currentSol.value ?: 0,
                     currentCamera.value ?: "FHAZ"
                 )
+                    .onStart { // info about loading
+                     }
+                    .catch { error -> _repositoryError.postValue(error.message) }
+                    .collect { list -> _listOfPhotos.postValue(list) }
+
             }
         }
     }
