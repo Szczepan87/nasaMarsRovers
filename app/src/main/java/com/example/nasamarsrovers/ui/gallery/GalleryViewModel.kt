@@ -1,20 +1,14 @@
 package com.example.nasamarsrovers.ui.gallery
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.CURIOSITY
-import com.example.nasamarsrovers.utils.DATE_FORMAT
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import java.util.*
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     private val _currentRover = MutableLiveData<String>()
@@ -38,9 +32,14 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         get() = _listOfPhotos
 
     private val _repositoryError = MutableLiveData<String?>().apply {
-        value = null }
+        value = null
+    }
     val repositoryError: LiveData<String?>
         get() = _repositoryError
+
+    val _isLoading = MutableLiveData<Boolean>()
+//    val isLoading: LiveData<Boolean>
+//        get() = _isLoading
 
     var isEarthDateUsed = false
 
@@ -65,20 +64,40 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                     currentEarthDate.value ?: "2012-08-06",
                     currentCamera.value ?: "FHAZ"
                 )
-                    .onStart { // info about loading
+                    .onStart {
+                        _isLoading.value = true
+                        Log.d("VIEW MODEl", "LOADING ON START ${_isLoading.value}")
                     }
-                    .catch { error -> _repositoryError.postValue(error.message) }
-                    .collect { list -> _listOfPhotos.postValue(list) }
+                    .catch { error ->
+                        _repositoryError.postValue(error.message)
+                        _isLoading.value = false
+                        Log.d("VIEW MODEl", "LOADING ON ERROR ${_isLoading.value}")
+                    }
+                    .collect { list ->
+                        _listOfPhotos.postValue(list)
+                        _isLoading.value = false
+                        Log.d("VIEW MODEl", "LOADING ON SUCCESS ${_isLoading.value}")
+                    }
             } else {
                 repository.getPhotosFlow(
                     currentRover.value ?: CURIOSITY,
                     currentSol.value ?: 0,
                     currentCamera.value ?: "FHAZ"
                 )
-                    .onStart { // info about loading
-                     }
-                    .catch { error -> _repositoryError.postValue(error.message) }
-                    .collect { list -> _listOfPhotos.postValue(list) }
+                    .onStart {
+                        _isLoading.value = true
+                        Log.d("VIEW MODEl", "LOADING ON START ${_isLoading.value}")
+                    }
+                    .catch { error ->
+                        _repositoryError.postValue(error.message)
+                        _isLoading.value = false
+                        Log.d("VIEW MODEl", "LOADING ON ERROR ${_isLoading.value}")
+                    }
+                    .collect { list ->
+                        _listOfPhotos.postValue(list)
+                        _isLoading.value = false
+                        Log.d("VIEW MODEl", "LOADING ON SUCCESS ${_isLoading.value}")
+                    }
 
             }
         }
