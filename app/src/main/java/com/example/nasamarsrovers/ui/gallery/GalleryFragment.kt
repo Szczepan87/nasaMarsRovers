@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
-import org.koin.android.ext.android.get
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 
 class GalleryFragment : Fragment() {
@@ -22,21 +22,24 @@ class GalleryFragment : Fragment() {
     private lateinit var binding: FragmentGalleryBinding
     private val galleryRecyclerAdapter = PhotosRecyclerAdapter()
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
         setUpObservers()
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         galleryViewModel.updatePhotosList()
         with(binding) {
+            lifecycleOwner = this.lifecycleOwner
             viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
             galleryRecyclerAdapter.onItemClickListener = {
@@ -46,6 +49,7 @@ class GalleryFragment : Fragment() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     private fun setUpObservers() {
         galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
             galleryRecyclerAdapter.updateList(it)
@@ -71,5 +75,6 @@ class GalleryFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         })
+        galleryViewModel._isListEmpty.observe(viewLifecycleOwner, Observer{  })
     }
 }

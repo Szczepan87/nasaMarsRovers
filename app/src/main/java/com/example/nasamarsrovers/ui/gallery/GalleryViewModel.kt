@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.CURIOSITY
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
@@ -37,9 +38,11 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     val repositoryError: LiveData<String?>
         get() = _repositoryError
 
-    val _isLoading = MutableLiveData<Boolean>()
+    val _isLoading = MutableLiveData<Boolean>(true)
 //    val isLoading: LiveData<Boolean>
 //        get() = _isLoading
+
+    val _isListEmpty = MutableLiveData<Boolean>(false)
 
     var isEarthDateUsed = false
 
@@ -56,6 +59,7 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         currentEarthDate.observeForever { Log.d("VIEW MODEl", "DATE: ${currentEarthDate.value}") }
     }
 
+    @ExperimentalCoroutinesApi
     fun updatePhotosList() {
         viewModelScope.launch {
             if (isEarthDateUsed) {
@@ -65,17 +69,18 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                     currentCamera.value ?: "FHAZ"
                 )
                     .onStart {
-                        _isLoading.value = true
+                        _isLoading.postValue(true)
+                        _listOfPhotos.postValue(emptyList())
                         Log.d("VIEW MODEl", "LOADING ON START ${_isLoading.value}")
                     }
                     .catch { error ->
                         _repositoryError.postValue(error.message)
-                        _isLoading.value = false
+                        _isLoading.postValue(false)
                         Log.d("VIEW MODEl", "LOADING ON ERROR ${_isLoading.value}")
                     }
                     .collect { list ->
                         _listOfPhotos.postValue(list)
-                        _isLoading.value = false
+                        _isLoading.postValue(false)
                         Log.d("VIEW MODEl", "LOADING ON SUCCESS ${_isLoading.value}")
                     }
             } else {
@@ -85,20 +90,25 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                     currentCamera.value ?: "FHAZ"
                 )
                     .onStart {
-                        _isLoading.value = true
+                        _isLoading.postValue(true)
                         Log.d("VIEW MODEl", "LOADING ON START ${_isLoading.value}")
                     }
                     .catch { error ->
                         _repositoryError.postValue(error.message)
-                        _isLoading.value = false
+                        _isLoading.postValue(false)
+                        _isListEmpty.postValue(true)
                         Log.d("VIEW MODEl", "LOADING ON ERROR ${_isLoading.value}")
                     }
                     .collect { list ->
                         _listOfPhotos.postValue(list)
-                        _isLoading.value = false
+                        _isLoading.postValue(false)
+                        if (list.isNullOrEmpty()) {
+                            _isListEmpty.postValue(true)
+                        } else {
+                            _isListEmpty.postValue(false)
+                        }
                         Log.d("VIEW MODEl", "LOADING ON SUCCESS ${_isLoading.value}")
                     }
-
             }
         }
     }
@@ -117,6 +127,11 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
 
     fun setEarthDate(date: String) {
         _currentEarthDate.postValue(date)
+    }
+
+    override fun onCleared() {
+        // TODO remove observers
+        super.onCleared()
     }
 
     // TODO retrieve manifest data about max sol, date etc.
