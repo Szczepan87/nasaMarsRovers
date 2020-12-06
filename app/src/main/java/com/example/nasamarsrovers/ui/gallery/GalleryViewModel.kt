@@ -13,50 +13,35 @@ import kotlinx.coroutines.launch
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     private val _currentRover = MutableLiveData<String>()
-    val currentRover: LiveData<String>
-        get() = _currentRover
+    val currentRover: LiveData<String> = _currentRover
 
     private val _currentCamera = MutableLiveData<String>()
-    val currentCamera: LiveData<String>
-        get() = _currentCamera
+    val currentCamera: LiveData<String> = _currentCamera
 
     private val _currentSol = MutableLiveData<Int>()
-    val currentSol: LiveData<Int>
-        get() = _currentSol
+    val currentSol: LiveData<Int> = _currentSol
 
     private val _currentEarthDate = MutableLiveData<String>()
-    val currentEarthDate: LiveData<String>
-        get() = _currentEarthDate
+    val currentEarthDate: LiveData<String> = _currentEarthDate
 
     private val _listOfPhotos = MutableLiveData<List<Photo>>()
-    val listOfPhotos: LiveData<List<Photo>>
-        get() = _listOfPhotos
+    val listOfPhotos: LiveData<List<Photo>> = _listOfPhotos
 
-    private val _repositoryError = MutableLiveData<String?>().apply {
-        value = null
-    }
-    val repositoryError: LiveData<String?>
-        get() = _repositoryError
+    private val _repositoryError = MutableLiveData<String?>(null)
+    val repositoryError: LiveData<String?> = _repositoryError
 
-    val _isLoading = MutableLiveData<Boolean>(true)
-//    val isLoading: LiveData<Boolean>
-//        get() = _isLoading
+    private val _isLoading = MutableLiveData<Boolean>(true)
+    val isLoading: LiveData<Boolean> = _isLoading
 
-    val _isListEmpty = MutableLiveData<Boolean>(false)
+    private val _isListEmpty = MutableLiveData<Boolean>(false)
+    val isListEmpty: LiveData<Boolean> = _isListEmpty
 
     var isEarthDateUsed = false
 
+    var roverPhotosObserver = Observer<List<Photo>> { _listOfPhotos.postValue(it) }
+
     init {
-        repository.roverPhotos.observeForever(Observer { _listOfPhotos.postValue(it) })
-        currentSol.observeForever(Observer { Log.d("VIEW MODEL", "SOL: ${currentSol.value}") })
-        currentRover.observeForever(Observer {
-            Log.d(
-                "VIEW MODEL",
-                "ROVER: ${currentRover.value}"
-            )
-        })
-        currentCamera.observeForever { Log.d("VIEW MODEl", "CAMERA: ${currentCamera.value}") }
-        currentEarthDate.observeForever { Log.d("VIEW MODEl", "DATE: ${currentEarthDate.value}") }
+        repository.roverPhotos.observeForever(roverPhotosObserver)
     }
 
     @ExperimentalCoroutinesApi
@@ -70,34 +55,12 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                 )
                     .onStart {
                         _isLoading.postValue(true)
-                        _listOfPhotos.postValue(emptyList())
-                        Log.d("VIEW MODEl", "LOADING ON START ${_isLoading.value}")
-                    }
-                    .catch { error ->
-                        _repositoryError.postValue(error.message)
-                        _isLoading.postValue(false)
-                        Log.d("VIEW MODEl", "LOADING ON ERROR ${_isLoading.value}")
-                    }
-                    .collect { list ->
-                        _listOfPhotos.postValue(list)
-                        _isLoading.postValue(false)
-                        Log.d("VIEW MODEl", "LOADING ON SUCCESS ${_isLoading.value}")
-                    }
-            } else {
-                repository.getPhotosFlow(
-                    currentRover.value ?: CURIOSITY,
-                    currentSol.value ?: 0,
-                    currentCamera.value ?: "FHAZ"
-                )
-                    .onStart {
-                        _isLoading.postValue(true)
-                        Log.d("VIEW MODEl", "LOADING ON START ${_isLoading.value}")
+                        _isListEmpty.postValue(false)
                     }
                     .catch { error ->
                         _repositoryError.postValue(error.message)
                         _isLoading.postValue(false)
                         _isListEmpty.postValue(true)
-                        Log.d("VIEW MODEl", "LOADING ON ERROR ${_isLoading.value}")
                     }
                     .collect { list ->
                         _listOfPhotos.postValue(list)
@@ -107,7 +70,30 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                         } else {
                             _isListEmpty.postValue(false)
                         }
-                        Log.d("VIEW MODEl", "LOADING ON SUCCESS ${_isLoading.value}")
+                    }
+            } else {
+                repository.getPhotosFlow(
+                    currentRover.value ?: CURIOSITY,
+                    currentSol.value ?: 0,
+                    currentCamera.value ?: "FHAZ"
+                )
+                    .onStart {
+                        _isLoading.postValue(true)
+                        _isListEmpty.postValue(false)
+                    }
+                    .catch { error ->
+                        _repositoryError.postValue(error.message)
+                        _isLoading.postValue(false)
+                        _isListEmpty.postValue(true)
+                    }
+                    .collect { list ->
+                        _listOfPhotos.postValue(list)
+                        _isLoading.postValue(false)
+                        if (list.isNullOrEmpty()) {
+                            _isListEmpty.postValue(true)
+                        } else {
+                            _isListEmpty.postValue(false)
+                        }
                     }
             }
         }
@@ -130,7 +116,7 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     }
 
     override fun onCleared() {
-        // TODO remove observers
+        repository.roverPhotos.removeObserver(roverPhotosObserver)
         super.onCleared()
     }
 

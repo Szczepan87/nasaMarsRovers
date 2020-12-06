@@ -1,7 +1,6 @@
 package com.example.nasamarsrovers.ui.gallery
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +38,7 @@ class GalleryFragment : Fragment() {
 
         galleryViewModel.updatePhotosList()
         with(binding) {
-            lifecycleOwner = this.lifecycleOwner
+            lifecycleOwner = viewLifecycleOwner
             viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
             galleryRecyclerAdapter.onItemClickListener = {
@@ -56,25 +55,20 @@ class GalleryFragment : Fragment() {
         })
         galleryViewModel.currentSol.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
-            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF SOL CHANGE")
         })
         galleryViewModel.currentEarthDate.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
-            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF EARTH DATE CHANGE")
         })
         galleryViewModel.currentRover.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
-            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF ROVER CHANGE")
         })
         galleryViewModel.currentCamera.observe(viewLifecycleOwner, Observer {
             galleryViewModel.updatePhotosList()
-            Log.d("GALLERY FRAGMENT", "UPDATING PHOTOS BECAUSE OF CAMERA CHANGE")
         })
         galleryViewModel.repositoryError.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         })
-        galleryViewModel._isListEmpty.observe(viewLifecycleOwner, Observer{  })
     }
 }

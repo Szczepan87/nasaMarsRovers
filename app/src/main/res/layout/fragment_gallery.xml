@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{viewModel._isLoading}" />
+            app:visible="@{safeUnbox(viewModel.isLoading)}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gallery_recycler"
@@ -46,10 +46,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="No photos for this day or rover"
-            android:visibility="@{viewModel._isListEmpty ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{safeUnbox(viewModel.isListEmpty)}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
