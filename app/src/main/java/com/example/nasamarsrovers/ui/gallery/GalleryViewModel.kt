@@ -1,6 +1,5 @@
 package com.example.nasamarsrovers.ui.gallery
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
@@ -53,49 +52,40 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
                     currentEarthDate.value ?: "2012-08-06",
                     currentCamera.value ?: "FHAZ"
                 )
-                    .onStart {
-                        _isLoading.postValue(true)
-                        _isListEmpty.postValue(false)
-                    }
-                    .catch { error ->
-                        _repositoryError.postValue(error.message)
-                        _isLoading.postValue(false)
-                        _isListEmpty.postValue(true)
-                    }
-                    .collect { list ->
-                        _listOfPhotos.postValue(list)
-                        _isLoading.postValue(false)
-                        if (list.isNullOrEmpty()) {
-                            _isListEmpty.postValue(true)
-                        } else {
-                            _isListEmpty.postValue(false)
-                        }
-                    }
+                    .onStart { doOnStart() }
+                    .catch { error -> doOnError(error) }
+                    .collect { list -> doOnCollect(list) }
             } else {
                 repository.getPhotosFlow(
                     currentRover.value ?: CURIOSITY,
                     currentSol.value ?: 0,
                     currentCamera.value ?: "FHAZ"
                 )
-                    .onStart {
-                        _isLoading.postValue(true)
-                        _isListEmpty.postValue(false)
-                    }
-                    .catch { error ->
-                        _repositoryError.postValue(error.message)
-                        _isLoading.postValue(false)
-                        _isListEmpty.postValue(true)
-                    }
-                    .collect { list ->
-                        _listOfPhotos.postValue(list)
-                        _isLoading.postValue(false)
-                        if (list.isNullOrEmpty()) {
-                            _isListEmpty.postValue(true)
-                        } else {
-                            _isListEmpty.postValue(false)
-                        }
-                    }
+                    .onStart { doOnStart() }
+                    .catch { error -> doOnError(error) }
+                    .collect { list -> doOnCollect(list) }
             }
+        }
+    }
+
+    private fun doOnStart() {
+        _isLoading.postValue(true)
+        _isListEmpty.postValue(false)
+    }
+
+    private fun doOnError(exception: Throwable) {
+        _repositoryError.postValue(exception.message)
+        _isLoading.postValue(false)
+        _isListEmpty.postValue(true)
+    }
+
+    private fun doOnCollect(list: List<Photo>) {
+        _listOfPhotos.postValue(list)
+        _isLoading.postValue(false)
+        if (list.isNullOrEmpty()) {
+            _isListEmpty.postValue(true)
+        } else {
+            _isListEmpty.postValue(false)
         }
     }
 

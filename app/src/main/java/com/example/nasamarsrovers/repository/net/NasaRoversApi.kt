@@ -12,12 +12,6 @@ interface NasaRoversApi {
     @GET("curiosity/photos?&page=1&api_key=$API_KEY")
     suspend fun getCuriosityPhotosBySol(@Query("sol") sol: Int): PhotosResponse
 
-    @GET("opportunity/photos?&page=1&api_key=$API_KEY")
-    fun getOpportunityPhotosBySol(@Query("sol") sol: Int): Deferred<PhotosResponse>
-
-    @GET("spirit/photos?&page=1&api_key=$API_KEY")
-    fun getSpiritPhotosBySol(@Query("sol") sol: Int): Deferred<PhotosResponse>
-
     @GET("curiosity/photos?&api_key=$API_KEY")
     suspend fun getCuriosityPhotosBySolAndCamera(
         @Query("sol") sol: Int,

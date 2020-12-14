@@ -1,26 +1,24 @@
 package com.example.nasamarsrovers
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.lifecycle.Observer
-import androidx.navigation.NavController
 import com.example.nasamarsrovers.ui.CameraPicker
 import com.example.nasamarsrovers.ui.DatePickerDialog
-import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.ui.SolPicker
+import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
-import org.koin.android.ext.android.get
+import com.google.android.material.navigation.NavigationView
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -33,29 +31,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUpToolbarBehaviour()
-
         setUpNavView()
     }
 
     private fun setUpToolbarBehaviour() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
         supportActionBar?.title = CURIOSITY
         supportActionBar?.subtitle = "Camera: FHAZ"
-        galleryViewModel.currentRover.observe(this, Observer { supportActionBar?.title = it })
-        galleryViewModel.currentCamera.observe(this, Observer { supportActionBar?.subtitle = "Camera: $it" })
+        setUpObservers()
+    }
+
+    private fun setUpObservers() {
+        galleryViewModel.currentRover.observe(this, { supportActionBar?.title = it })
+        galleryViewModel.currentCamera.observe(this, { supportActionBar?.subtitle = "Camera: $it" })
     }
 
     private fun setUpNavView() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
         drawerLayout = findViewById(R.id.drawer_layout)
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.galleryFragment
-            ), drawerLayout
-        )
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.galleryFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         setUpMenuItems(navView, navController)
     }
@@ -66,43 +62,14 @@ class MainActivity : AppCompatActivity() {
             menu.getItem(0).isChecked = true
             setNavigationItemSelectedListener {
                 return@setNavigationItemSelectedListener when (it.itemId) {
-                    R.id.sol_drawer_item -> {
-                        SolPicker(
-                            galleryViewModel
-                        ).show(supportFragmentManager, "SOL_PICKER")
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        true
-                    }
-                    R.id.curiosity_drawer_item -> {
-                        galleryViewModel.setCurrentRover(CURIOSITY)
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        true
-                    }
-                    R.id.opportunity_drawer_item -> {
-                        galleryViewModel.setCurrentRover(OPPORTUNITY)
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        true
-                    }
-                    R.id.spirit_drawer_item -> {
-                        galleryViewModel.setCurrentRover(SPIRIT)
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        true
-                    }
-                    R.id.date_drawer_item -> {
-                        DatePickerDialog(galleryViewModel).show(
-                            supportFragmentManager,
-                            "EARTH_DATE_DIALOG"
-                        )
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        true
-                    }
-                    R.id.camera_drawer_item -> {
-                        CameraPicker(galleryViewModel).show(supportFragmentManager, "CAMERA_PICKER")
-                        drawerLayout.closeDrawer(GravityCompat.START)
-                        true
-                    }
+                    R.id.sol_drawer_item -> launchSolPicker()
+                    R.id.curiosity_drawer_item -> setCurrentlyDisplayedRover(CURIOSITY)
+                    R.id.opportunity_drawer_item -> setCurrentlyDisplayedRover(OPPORTUNITY)
+                    R.id.spirit_drawer_item -> setCurrentlyDisplayedRover(SPIRIT)
+                    R.id.date_drawer_item -> launchDatePicker()
+                    R.id.camera_drawer_item -> launchCameraPicker()
                     else -> {
-                        drawerLayout.closeDrawer(GravityCompat.START)
+                        closeDrawer()
                         true
                     }
                 }
@@ -113,5 +80,33 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun launchSolPicker(): Boolean {
+        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
+        closeDrawer()
+        return true
+    }
+
+    private fun setCurrentlyDisplayedRover(roverName: String): Boolean {
+        galleryViewModel.setCurrentRover(roverName)
+        closeDrawer()
+        return true
+    }
+
+    private fun closeDrawer() {
+        drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    private fun launchCameraPicker(): Boolean {
+        CameraPicker(galleryViewModel).show(supportFragmentManager, "CAMERA_PICKER")
+        closeDrawer()
+        return true
+    }
+
+    private fun launchDatePicker(): Boolean {
+        DatePickerDialog(galleryViewModel).show(supportFragmentManager, "EARTH_DATE_DIALOG")
+        closeDrawer()
+        return true
     }
 }
