@@ -1,16 +1,12 @@
 package com.example.nasamarsrovers.di
 
 import android.content.Context
-import com.example.nasamarsrovers.utils.API_KEY
-import com.example.nasamarsrovers.utils.BASE_URL
-import com.example.nasamarsrovers.repository.net.NasaRoversApi
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.repository.net.NoInternetConnectionInterceptor
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
+import com.example.nasamarsrovers.utils.BASE_URL
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,13 +20,12 @@ val repositoryModule = module {
     single { PhotosRepository(get()) }
 }
 
-private fun provideRetrofit(context: Context): NasaRoversApi {
+private fun provideRetrofit(context: Context): Retrofit {
     return Retrofit.Builder().addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(GsonConverterFactory.create())
         .client(provideOkHttp3Client(context))
         .baseUrl(BASE_URL)
         .build()
-        .create(NasaRoversApi::class.java)
 }
 
 private fun provideOkHttp3Client(context: Context): OkHttpClient {

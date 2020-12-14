@@ -82,12 +82,6 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun launchSolPicker(): Boolean {
-        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
-        closeDrawer()
-        return true
-    }
-
     private fun setCurrentlyDisplayedRover(roverName: String): Boolean {
         galleryViewModel.setCurrentRover(roverName)
         closeDrawer()
@@ -96,6 +90,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun closeDrawer() {
         drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    private fun launchSolPicker(): Boolean {
+        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
+        closeDrawer()
+        return true
     }
 
     private fun launchCameraPicker(): Boolean {
