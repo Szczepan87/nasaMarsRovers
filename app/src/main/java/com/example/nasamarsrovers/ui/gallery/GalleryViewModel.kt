@@ -4,6 +4,9 @@ import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.CURIOSITY
+import com.example.nasamarsrovers.utils.DEFAULT_CAMERA
+import com.example.nasamarsrovers.utils.DEFAULT_DATE
+import com.example.nasamarsrovers.utils.DEFAULT_SOL
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -49,8 +52,8 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
             if (isEarthDateUsed) {
                 repository.getPhotosFlow(
                     currentRover.value ?: CURIOSITY,
-                    currentEarthDate.value ?: "2012-08-06",
-                    currentCamera.value ?: "FHAZ"
+                    currentEarthDate.value ?: DEFAULT_DATE,
+                    currentCamera.value ?: DEFAULT_CAMERA
                 )
                     .onStart { doOnStart() }
                     .catch { error -> doOnError(error) }
@@ -58,8 +61,8 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
             } else {
                 repository.getPhotosFlow(
                     currentRover.value ?: CURIOSITY,
-                    currentSol.value ?: 0,
-                    currentCamera.value ?: "FHAZ"
+                    currentSol.value ?: DEFAULT_SOL,
+                    currentCamera.value ?: DEFAULT_CAMERA
                 )
                     .onStart { doOnStart() }
                     .catch { error -> doOnError(error) }

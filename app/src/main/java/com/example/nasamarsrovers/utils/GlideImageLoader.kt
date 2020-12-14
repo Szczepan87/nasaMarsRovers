@@ -1,7 +1,6 @@
 package com.example.nasamarsrovers.utils
 
 import android.graphics.drawable.Drawable
-import android.opengl.Visibility
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -18,8 +17,7 @@ class GlideImageLoader(
 ) {
 
     fun load(url: String) {
-
-        progressBar.visibility = View.VISIBLE
+        showProgressBar()
 
         Glide.with(imageView.context)
             .load(url)
@@ -30,10 +28,7 @@ class GlideImageLoader(
                     model: Any?,
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
-                ): Boolean {
-                    progressBar.visibility = View.INVISIBLE
-                    return false
-                }
+                ) = hideProgressBar()
 
                 override fun onResourceReady(
                     resource: Drawable?,
@@ -41,11 +36,17 @@ class GlideImageLoader(
                     target: Target<Drawable>?,
                     dataSource: DataSource?,
                     isFirstResource: Boolean
-                ): Boolean {
-                    progressBar.visibility = View.INVISIBLE
-                    return false
-                }
+                ) = hideProgressBar()
             })
             .into(imageView)
+    }
+
+    private fun hideProgressBar(): Boolean {
+        progressBar.visibility = View.INVISIBLE
+        return false
+    }
+
+    private fun showProgressBar() {
+        progressBar.visibility = View.VISIBLE
     }
 }
