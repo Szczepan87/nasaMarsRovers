@@ -108,6 +108,16 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         _currentEarthDate.postValue(date)
     }
 
+    fun increaseSolByOne() {
+        val currentSol = _currentSol.value ?: 0
+        setSol(currentSol + 1)
+    }
+
+    fun decreaseSolByOne() {
+        val currentSol = _currentSol.value ?: 0
+        if (currentSol > 0) setSol(currentSol - 1) else return
+    }
+
     override fun onCleared() {
         repository.roverPhotos.removeObserver(roverPhotosObserver)
         super.onCleared()

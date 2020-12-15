@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
+import com.example.nasamarsrovers.utils.OnSwipeTouchListener
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
@@ -69,6 +70,12 @@ class GalleryFragment : Fragment() {
             if (it != null) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
+        })
+    }
+
+    private fun steOnSwipeListener() {
+        binding.galleryLayout.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
+
         })
     }
 }
