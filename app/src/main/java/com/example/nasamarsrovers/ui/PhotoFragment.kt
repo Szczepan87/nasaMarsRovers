@@ -21,6 +21,6 @@ class PhotoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val url = arguments?.let { PhotoFragmentArgs.fromBundle(it).photoUrl }
-        Glide.with(this.requireContext()).load(url).into(photo_touch_imageView)
+        Glide.with(this.requireContext()).load(url).into(photoTouchImageView)
     }
 }

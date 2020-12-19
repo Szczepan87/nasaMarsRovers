@@ -1,5 +1,6 @@
 package com.example.nasamarsrovers.ui.gallery
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +48,7 @@ class GalleryFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+        setOnSwipeListener()
     }
 
     @ExperimentalCoroutinesApi
@@ -73,9 +75,18 @@ class GalleryFragment : Fragment() {
         })
     }
 
-    private fun steOnSwipeListener() {
-        binding.galleryLayout.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setOnSwipeListener() {
+        binding.galleryRecycler.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
+            override fun onSwipeRight() {
+                if (galleryViewModel.isEarthDateUsed) galleryViewModel.previousEarthDate()
+                else galleryViewModel.decreaseSolByOne()
+            }
 
+            override fun onSwipeLeft() {
+                if (galleryViewModel.isEarthDateUsed) galleryViewModel.nextEarthDay()
+                else galleryViewModel.increaseSolByOne()
+            }
         })
     }
 }

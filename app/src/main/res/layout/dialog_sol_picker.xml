@@ -11,13 +11,13 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sol_picker_dialog_layout"
+        android:id="@+id/solPickerDialogLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
         <TextView
-            android:id="@+id/sol_picker_title"
+            android:id="@+id/solPickerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -30,38 +30,38 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <NumberPicker
-            android:id="@+id/sol_numberPicker"
+            android:id="@+id/solNumberPicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sol_picker_title"
+            app:layout_constraintTop_toBottomOf="@+id/solPickerTitle"
             app:value="@{viewModel.currentSol}" />
 
         <Button
-            android:id="@+id/sol_dialog_ok_button"
+            android:id="@+id/solDialogOkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/ok"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/sol_numberPicker" />
+            app:layout_constraintStart_toStartOf="@+id/solDialogGuideline"
+            app:layout_constraintTop_toBottomOf="@+id/solNumberPicker" />
 
         <Button
-            android:id="@+id/sol_dialog_cancel_button"
+            android:id="@+id/solDialogCancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@string/cancel"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@+id/solDialogGuideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sol_numberPicker" />
+            app:layout_constraintTop_toBottomOf="@+id/solNumberPicker" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/solDialogGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavView() {
-        val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navView: NavigationView = findViewById(R.id.navView)
+        val navController = findNavController(R.id.navHostFragment)
         drawerLayout = findViewById(R.id.drawer_layout)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.galleryFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
+        val navController = findNavController(R.id.navHostFragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 

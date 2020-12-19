@@ -39,7 +39,7 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
 
         fun bind(photo: Photo) {
             binding.photo = photo
-            glideImageLoader = GlideImageLoader(binding.cardPhotoImageView, binding.photoCardProgressBar)
+            glideImageLoader = GlideImageLoader(binding.cardPhotoImageView, binding.cardPhotoProgressBar)
             glideImageLoader?.load(photo.imgSrc.toString())
             binding.photoCardLayout.setOnClickListener { onItemClickListener?.invoke(photo.imgSrc) }
         }

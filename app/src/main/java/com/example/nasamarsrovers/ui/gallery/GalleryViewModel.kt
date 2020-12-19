@@ -1,17 +1,19 @@
 package com.example.nasamarsrovers.ui.gallery
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
-import com.example.nasamarsrovers.utils.CURIOSITY
-import com.example.nasamarsrovers.utils.DEFAULT_CAMERA
-import com.example.nasamarsrovers.utils.DEFAULT_DATE
-import com.example.nasamarsrovers.utils.DEFAULT_SOL
+import com.example.nasamarsrovers.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import java.util.*
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     private val _currentRover = MutableLiveData<String>()
@@ -116,6 +118,24 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     fun decreaseSolByOne() {
         val currentSol = _currentSol.value ?: 0
         if (currentSol > 0) setSol(currentSol - 1) else return
+    }
+
+    fun nextEarthDay() {
+        val currentEarthDateString = _currentEarthDate.value ?: return
+        val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
+        val cal = Calendar.getInstance()
+        cal.time = date
+        cal.set(Calendar.DAY_OF_YEAR, 1)
+        _currentEarthDate.value = DATE_FORMAT.format(cal.time)
+    }
+
+    fun previousEarthDate() {
+        val currentEarthDateString = _currentEarthDate.value ?: return
+        val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
+        val cal = Calendar.getInstance()
+        cal.time = date
+        cal.set(Calendar.DAY_OF_YEAR, -1)
+        _currentEarthDate.value = DATE_FORMAT.format(cal.time)
     }
 
     override fun onCleared() {

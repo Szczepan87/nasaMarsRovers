@@ -13,13 +13,38 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/gallery_layout"
+        android:id="@+id/galleryLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.gallery.GalleryFragment">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/galleryRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:listitem="@layout/photo_card"
+            tools:itemCount="12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:spanCount="3" />
+
+        <TextView
+            android:id="@+id/galleryEmptyListInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/empty_list_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:visible="@{safeUnbox(viewModel.isListEmpty)}" />
+
         <ProgressBar
-            android:id="@+id/gallery_progressBar"
+            android:id="@+id/galleryProgressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,29 +54,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:visible="@{safeUnbox(viewModel.isLoading)}" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/gallery_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:spanCount="3" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="No photos for this day or rover"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:visible="@{safeUnbox(viewModel.isListEmpty)}" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
