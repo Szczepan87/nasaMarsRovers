@@ -31,6 +31,7 @@ class GalleryFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
         setUpObservers()
+        setOnSwipeListener()
         return binding.root
     }
 
@@ -48,7 +49,6 @@ class GalleryFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
-        setOnSwipeListener()
     }
 
     @ExperimentalCoroutinesApi

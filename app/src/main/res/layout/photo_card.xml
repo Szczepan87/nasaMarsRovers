@@ -38,7 +38,8 @@
             app:earthDate="@{photo.earthDate}"
             app:layout_constraintBottom_toTopOf="@+id/cardPhotoImageView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Earth date: 2012-08-06"/>
 
         <TextView
             android:id="@+id/cardPhotoSolNumberText"
@@ -52,7 +53,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardPhotoImageView"
-            app:sol="@{photo.sol}" />
+            app:sol="@{photo.sol}"
+            tools:text="Sol: 0"/>
 
         <ProgressBar
             android:id="@+id/cardPhotoProgressBar"

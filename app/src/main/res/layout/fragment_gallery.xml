@@ -12,7 +12,7 @@
             type="com.example.nasamarsrovers.ui.gallery.GalleryViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/galleryLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,19 +28,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:listitem="@layout/photo_card"
             tools:itemCount="12"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:spanCount="3" />
 
         <TextView
             android:id="@+id/galleryEmptyListInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:text="@string/empty_list_info"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
             app:visible="@{safeUnbox(viewModel.isListEmpty)}" />
 
         <ProgressBar
@@ -49,11 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminateDrawable="@drawable/progress"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
             app:visible="@{safeUnbox(viewModel.isLoading)}" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
