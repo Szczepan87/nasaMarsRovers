@@ -21,7 +21,7 @@ class GalleryFragment : Fragment() {
 
     private val galleryViewModel: GalleryViewModel by inject()
     private lateinit var binding: FragmentGalleryBinding
-    private val galleryRecyclerAdapter = PhotosRecyclerAdapter()
+    private val galleryRecyclerAdapter: PhotosRecyclerAdapter by lazy { PhotosRecyclerAdapter(::onPhotoClick) }
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(
@@ -31,7 +31,6 @@ class GalleryFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
         setUpObservers()
-        setOnSwipeListener()
         return binding.root
     }
 
@@ -39,16 +38,18 @@ class GalleryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setOnSwipeListener()
         galleryViewModel.updatePhotosList()
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
-            galleryRecyclerAdapter.onItemClickListener = {
-                val action = GalleryFragmentDirections.actionGalleryFragmentToPhotoFragment(it)
-                findNavController().navigate(action)
-            }
         }
+    }
+
+    private fun onPhotoClick(stringUrl: String?) {
+        val action = GalleryFragmentDirections.actionGalleryFragmentToPhotoFragment(stringUrl)
+        findNavController().navigate(action)
     }
 
     @ExperimentalCoroutinesApi

@@ -9,10 +9,9 @@ import com.example.nasamarsrovers.model.Photo
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import kotlinx.android.synthetic.main.photo_card.view.*
 
-class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosViewHolder>() {
+class PhotosRecyclerAdapter(private val onItemCLick: ((String?) -> Unit)) : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosViewHolder>() {
 
     private val photosList = mutableListOf<Photo>()
-    var onItemClickListener: ((String?) -> Unit)? = null
 
     fun updateList(list: List<Photo>) {
         photosList.clear()
@@ -41,7 +40,7 @@ class PhotosRecyclerAdapter : RecyclerView.Adapter<PhotosRecyclerAdapter.PhotosV
             binding.photo = photo
             glideImageLoader = GlideImageLoader(binding.cardPhotoImageView, binding.cardPhotoProgressBar)
             glideImageLoader?.load(photo.imgSrc.toString())
-            binding.photoCardLayout.setOnClickListener { onItemClickListener?.invoke(photo.imgSrc) }
+            binding.photoCardLayout.setOnClickListener { onItemCLick.invoke(photo.imgSrc) }
         }
     }
 }
