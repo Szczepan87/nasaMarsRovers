@@ -105,7 +105,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchDatePicker(): Boolean {
-        DatePickerDialog(galleryViewModel).show(supportFragmentManager, "EARTH_DATE_DIALOG")
+        val datePicker = DatePickerDialog(galleryViewModel)
+        datePicker.show(supportFragmentManager, "EARTH_DATE_DIALOG")
         closeDrawer()
         return true
     }

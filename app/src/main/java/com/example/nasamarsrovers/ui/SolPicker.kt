@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.DialogSolPickerBinding
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
+import org.koin.android.ext.android.inject
 
 class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment() {
 
@@ -31,7 +32,7 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
             viewModel = galleryViewModel
             with(solNumberPicker) {
                 minValue = 0
-                maxValue = 2200
+                maxValue = galleryViewModel.maxSolForRover.value ?: 0
             }
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {

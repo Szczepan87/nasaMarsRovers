@@ -1,5 +1,6 @@
 package com.example.nasamarsrovers.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.nasamarsrovers.model.Photo
@@ -55,6 +56,48 @@ class PhotosRepository(retrofit: Retrofit) {
                 else -> emptyList()
             }
             emit(list)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    @ExperimentalCoroutinesApi
+    fun getMaxSolForRover(roverName: String): Flow<Int> {
+        return flow {
+            val maxSol = when (roverName) {
+                CURIOSITY -> {
+                    Log.d("REPOSITORY", "MAX SOL: ${curiosityApi.getRoverManifest().maxSol}")
+                    Log.d("REPOSITORY", "MAX SOL MANIFEST: ${curiosityApi.getRoverManifest()}")
+                    curiosityApi.getRoverManifest().maxSol ?: 0}
+                OPPORTUNITY -> opportunityApi.getRoverManifest().maxSol ?: 0
+                SPIRIT -> spiritApi.getRoverManifest().maxSol ?: 0
+                else -> 0
+            }
+            emit(maxSol)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    @ExperimentalCoroutinesApi
+    fun getMaxEarthDateForRover(roverName: String): Flow<String> {
+        return flow {
+            val maxDate = when (roverName) {
+                CURIOSITY -> curiosityApi.getRoverManifest().maxDate ?: ""
+                OPPORTUNITY -> opportunityApi.getRoverManifest().maxDate ?: ""
+                SPIRIT -> spiritApi.getRoverManifest().maxDate ?: ""
+                else -> ""
+            }
+            emit(maxDate)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    @ExperimentalCoroutinesApi
+    fun getLandingDateForRover(roverName: String):Flow<String>{
+        return flow {
+            val landingDate = when(roverName){
+                CURIOSITY -> curiosityApi.getRoverManifest().landingDate ?: ""
+                OPPORTUNITY -> opportunityApi.getRoverManifest().landingDate ?: ""
+                SPIRIT -> spiritApi.getRoverManifest().landingDate ?: ""
+                else -> ""
+            }
+            emit(landingDate)
         }.flowOn(Dispatchers.IO)
     }
 }

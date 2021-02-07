@@ -1,5 +1,6 @@
 package com.example.nasamarsrovers.ui.gallery
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -40,6 +41,15 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     private val _isListEmpty = MutableLiveData<Boolean>(false)
     val isListEmpty: LiveData<Boolean> = _isListEmpty
 
+    private val _maxSolForRover = MutableLiveData<Int>()
+    val maxSolForRover: LiveData<Int> = _maxSolForRover
+
+    private val _maxEarthDate = MutableLiveData<String>()
+    val maxEarthDate = _maxEarthDate
+
+    private val _landingDate = MutableLiveData<String>()
+    val landingDate = _landingDate
+
     var isEarthDateUsed = false
 
     var roverPhotosObserver = Observer<List<Photo>> { _listOfPhotos.postValue(it) }
@@ -50,6 +60,9 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
 
     @ExperimentalCoroutinesApi
     fun updatePhotosList() {
+        getMaxSolForRover()
+        getMaxEarthDateForRover()
+        getLandingDateForRover()
         viewModelScope.launch {
             if (isEarthDateUsed) {
                 repository.getPhotosFlow(
@@ -136,6 +149,35 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         cal.time = date
         cal.set(Calendar.DAY_OF_YEAR, -1)
         _currentEarthDate.value = DATE_FORMAT.format(cal.time)
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun getMaxSolForRover() {
+        viewModelScope.launch {
+            repository.getMaxSolForRover(currentRover.value ?: CURIOSITY)
+                .catch { doOnError(it) }
+                .collect {
+                    Log.d("VIEW MODEL ","MAX SOL: $it")
+                    _maxSolForRover.value = it }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun getMaxEarthDateForRover() {
+        viewModelScope.launch {
+            repository.getMaxEarthDateForRover(currentRover.value ?: CURIOSITY)
+                .catch { doOnError(it) }
+                .collect { _maxEarthDate.value = it }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun getLandingDateForRover() {
+        viewModelScope.launch {
+            repository.getLandingDateForRover(currentRover.value ?: CURIOSITY)
+                .catch { doOnError(it) }
+                .collect { _landingDate.value = it }
+        }
     }
 
     override fun onCleared() {
