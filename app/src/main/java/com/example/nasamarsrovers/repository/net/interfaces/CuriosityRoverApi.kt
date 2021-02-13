@@ -1,6 +1,7 @@
 package com.example.nasamarsrovers.repository.net.interfaces
 
 import com.example.nasamarsrovers.model.PhotoManifest
+import com.example.nasamarsrovers.model.PhotoManifestResponse
 import com.example.nasamarsrovers.model.PhotosResponse
 import com.example.nasamarsrovers.utils.API_KEY
 import retrofit2.http.GET
@@ -24,5 +25,5 @@ interface CuriosityRoverApi : BasicRoverInterface {
     ): PhotosResponse
 
     @GET("manifests/curiosity?api_key=$API_KEY")
-    override suspend fun getRoverManifest(): PhotoManifest
+    override suspend fun getRoverManifest(): PhotoManifestResponse
 }

@@ -64,11 +64,12 @@ class PhotosRepository(retrofit: Retrofit) {
         return flow {
             val maxSol = when (roverName) {
                 CURIOSITY -> {
-                    Log.d("REPOSITORY", "MAX SOL: ${curiosityApi.getRoverManifest().maxSol}")
+                    Log.d("REPOSITORY", "MAX SOL FOR ROVER: $roverName")
+                    Log.d("REPOSITORY", "MAX SOL: ${curiosityApi.getRoverManifest().photoManifest?.maxSol}")
                     Log.d("REPOSITORY", "MAX SOL MANIFEST: ${curiosityApi.getRoverManifest()}")
-                    curiosityApi.getRoverManifest().maxSol ?: 0}
-                OPPORTUNITY -> opportunityApi.getRoverManifest().maxSol ?: 0
-                SPIRIT -> spiritApi.getRoverManifest().maxSol ?: 0
+                    curiosityApi.getRoverManifest().photoManifest?.maxSol ?: 0}
+                OPPORTUNITY -> opportunityApi.getRoverManifest().photoManifest?.maxSol ?: 0
+                SPIRIT -> spiritApi.getRoverManifest().photoManifest?.maxSol ?: 0
                 else -> 0
             }
             emit(maxSol)
@@ -79,9 +80,9 @@ class PhotosRepository(retrofit: Retrofit) {
     fun getMaxEarthDateForRover(roverName: String): Flow<String> {
         return flow {
             val maxDate = when (roverName) {
-                CURIOSITY -> curiosityApi.getRoverManifest().maxDate ?: ""
-                OPPORTUNITY -> opportunityApi.getRoverManifest().maxDate ?: ""
-                SPIRIT -> spiritApi.getRoverManifest().maxDate ?: ""
+                CURIOSITY -> curiosityApi.getRoverManifest().photoManifest?.maxDate.orEmpty()
+                OPPORTUNITY -> opportunityApi.getRoverManifest().photoManifest?.maxDate.orEmpty()
+                SPIRIT -> spiritApi.getRoverManifest().photoManifest?.maxDate.orEmpty()
                 else -> ""
             }
             emit(maxDate)
@@ -92,9 +93,9 @@ class PhotosRepository(retrofit: Retrofit) {
     fun getLandingDateForRover(roverName: String):Flow<String>{
         return flow {
             val landingDate = when(roverName){
-                CURIOSITY -> curiosityApi.getRoverManifest().landingDate ?: ""
-                OPPORTUNITY -> opportunityApi.getRoverManifest().landingDate ?: ""
-                SPIRIT -> spiritApi.getRoverManifest().landingDate ?: ""
+                CURIOSITY -> curiosityApi.getRoverManifest().photoManifest?.landingDate.orEmpty()
+                OPPORTUNITY -> opportunityApi.getRoverManifest().photoManifest?.landingDate.orEmpty()
+                SPIRIT -> spiritApi.getRoverManifest().photoManifest?.landingDate.orEmpty()
                 else -> ""
             }
             emit(landingDate)

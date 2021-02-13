@@ -1,11 +1,7 @@
 package com.example.nasamarsrovers.ui.gallery
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.*
@@ -14,9 +10,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import java.util.*
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
+    companion object {
+        private val ONE_DAY_IN_MILLISEC = 24 * 60 * 60 * 1000
+    }
+
     private val _currentRover = MutableLiveData<String>()
     val currentRover: LiveData<String> = _currentRover
 
@@ -136,19 +135,15 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     fun nextEarthDay() {
         val currentEarthDateString = _currentEarthDate.value ?: return
         val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
-        val cal = Calendar.getInstance()
-        cal.time = date
-        cal.set(Calendar.DAY_OF_YEAR, 1)
-        _currentEarthDate.value = DATE_FORMAT.format(cal.time)
+        val nextDayInMillis = date.time.plus(ONE_DAY_IN_MILLISEC)
+        _currentEarthDate.value = DATE_FORMAT.format(nextDayInMillis)
     }
 
     fun previousEarthDate() {
         val currentEarthDateString = _currentEarthDate.value ?: return
         val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
-        val cal = Calendar.getInstance()
-        cal.time = date
-        cal.set(Calendar.DAY_OF_YEAR, -1)
-        _currentEarthDate.value = DATE_FORMAT.format(cal.time)
+        val previousDayInMillis = date.time.minus(ONE_DAY_IN_MILLISEC)
+        _currentEarthDate.value = DATE_FORMAT.format(previousDayInMillis)
     }
 
     @ExperimentalCoroutinesApi
@@ -157,8 +152,9 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
             repository.getMaxSolForRover(currentRover.value ?: CURIOSITY)
                 .catch { doOnError(it) }
                 .collect {
-                    Log.d("VIEW MODEL ","MAX SOL: $it")
-                    _maxSolForRover.value = it }
+                    Log.d("VIEW MODEL ", "MAX SOL: $it")
+                    _maxSolForRover.value = it
+                }
         }
     }
 
@@ -184,6 +180,4 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
         repository.roverPhotos.removeObserver(roverPhotosObserver)
         super.onCleared()
     }
-
-    // TODO retrieve manifest data about max sol, date etc.
 }

@@ -46,6 +46,5 @@
             android:indeterminateDrawable="@drawable/progress"
             android:layout_gravity="center"
             app:visible="@{safeUnbox(viewModel.isLoading)}" />
-
     </FrameLayout>
 </layout>

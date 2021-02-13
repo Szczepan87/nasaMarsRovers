@@ -17,15 +17,27 @@ class DatePickerDialog(private val galleryViewModel: GalleryViewModel) : DialogF
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
+        val maxStringDate = galleryViewModel.maxEarthDate.value
+        val maxYear = maxStringDate?.split("-")?.first()?.toInt()
+        val maxMonth = maxStringDate?.split("-")?.get(1)?.toInt()?.minus(1)
+        val maxDay = maxStringDate?.split("-")?.last()?.toInt()
+
+
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        return DatePickerDialog(requireActivity(), this, year, month, day)
+        return DatePickerDialog(
+            requireActivity(),
+            this,
+            maxYear ?: year,
+            maxMonth ?: month,
+            maxDay ?: day
+        )
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        calendar.set(year,month,dayOfMonth)
+        calendar.set(year, month, dayOfMonth)
         galleryViewModel.isEarthDateUsed = true
         Log.d("DATE PICKER", "EARTH DATE USED: ${galleryViewModel.isEarthDateUsed}")
 
