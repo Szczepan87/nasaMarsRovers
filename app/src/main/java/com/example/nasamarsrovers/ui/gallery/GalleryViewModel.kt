@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     companion object {
-        private val ONE_DAY_IN_MILLISEC = 24 * 60 * 60 * 1000
+        private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000
     }
 
     private val _currentRover = MutableLiveData<String>()
@@ -135,14 +135,14 @@ class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
     fun nextEarthDay() {
         val currentEarthDateString = _currentEarthDate.value ?: return
         val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
-        val nextDayInMillis = date.time.plus(ONE_DAY_IN_MILLISEC)
+        val nextDayInMillis = date.time.plus(ONE_DAY_IN_MILLIS)
         _currentEarthDate.value = DATE_FORMAT.format(nextDayInMillis)
     }
 
     fun previousEarthDate() {
         val currentEarthDateString = _currentEarthDate.value ?: return
         val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
-        val previousDayInMillis = date.time.minus(ONE_DAY_IN_MILLISEC)
+        val previousDayInMillis = date.time.minus(ONE_DAY_IN_MILLIS)
         _currentEarthDate.value = DATE_FORMAT.format(previousDayInMillis)
     }
 
