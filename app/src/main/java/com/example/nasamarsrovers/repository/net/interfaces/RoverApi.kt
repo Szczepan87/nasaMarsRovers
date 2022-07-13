@@ -25,7 +25,7 @@ interface RoverApi {
     @GET("rovers/{rover}/photos?&api_key=$API_KEY")
     suspend fun getPhotosByDateAndCamera(
         @Path("rover") rover: String,
-        @Query("sol") date: String,
+        @Query("earth_date") date: String,
         @Query("camera") camera: String
     ): PhotosResponse
 
