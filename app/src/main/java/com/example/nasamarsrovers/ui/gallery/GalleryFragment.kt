@@ -8,22 +8,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.OnSwipeTouchListener
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.android.ext.android.inject
 
+@AndroidEntryPoint
 class GalleryFragment : Fragment() {
 
-    private val galleryViewModel: GalleryViewModel by inject()
+    private val galleryViewModel: GalleryViewModel by viewModels()
     private lateinit var binding: FragmentGalleryBinding
     private val galleryRecyclerAdapter: PhotosRecyclerAdapter by lazy { PhotosRecyclerAdapter(::onPhotoClick) }
 
-    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +35,6 @@ class GalleryFragment : Fragment() {
         return binding.root
     }
 
-    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

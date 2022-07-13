@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.Retrofit
+import javax.inject.Inject
 
-class PhotosRepository(retrofit: Retrofit) {
+class PhotosRepository @Inject constructor(private val roverApi: RoverApi) {
 
     private val _roverPhotos = MutableLiveData<List<Photo>>()
     val roverPhotos: LiveData<List<Photo>>
         get() = _roverPhotos
-    private val roverApi = retrofit.create(RoverApi::class.java)
 
     @ExperimentalCoroutinesApi
     fun getPhotosFlow(roverName: String, sol: Int, camera: String): Flow<List<Photo>> {

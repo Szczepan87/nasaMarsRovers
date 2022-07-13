@@ -1,6 +1,7 @@
 package com.example.nasamarsrovers
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -19,12 +20,13 @@ import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
 import com.google.android.material.navigation.NavigationView
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val galleryViewModel: GalleryViewModel by inject()
+    private val galleryViewModel: GalleryViewModel by viewModels()
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {

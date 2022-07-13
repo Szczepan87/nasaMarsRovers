@@ -5,13 +5,16 @@ import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.utils.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GalleryViewModel(private val repository: PhotosRepository) : ViewModel() {
+@HiltViewModel
+class GalleryViewModel @Inject constructor(private val repository: PhotosRepository) : ViewModel() {
     companion object {
         private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000
     }

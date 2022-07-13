@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.DialogSolPickerBinding
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
-import org.koin.android.ext.android.inject
 
 class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment() {
 
@@ -37,7 +36,7 @@ class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {
                 galleryViewModel.isEarthDateUsed = false
-                Log.d("SOL PICKER", "EARH DATE USED: ${galleryViewModel.isEarthDateUsed}")
+                Log.d("SOL PICKER", "EARTH DATE USED: ${galleryViewModel.isEarthDateUsed}")
                 galleryViewModel.setSol(
                     solNumberPicker.value
                 )
