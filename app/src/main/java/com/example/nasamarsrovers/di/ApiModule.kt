@@ -1,5 +1,6 @@
 package com.example.nasamarsrovers.di
 
+import android.content.Context
 import com.example.nasamarsrovers.repository.net.NoInternetConnectionInterceptor
 import com.example.nasamarsrovers.repository.net.interfaces.RoverApi
 import com.example.nasamarsrovers.utils.BASE_URL
@@ -7,6 +8,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -39,5 +41,11 @@ object ApiModule {
         return OkHttpClient.Builder()
             .addInterceptor(noInternetConnectionInterceptor)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoInternetConnectionInterceptor(@ApplicationContext context: Context): NoInternetConnectionInterceptor{
+        return NoInternetConnectionInterceptor(context)
     }
 }
