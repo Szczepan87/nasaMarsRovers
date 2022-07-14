@@ -7,18 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentPhotoBinding
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.OnSwipeTouchListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_photo.*
-import org.koin.android.ext.android.inject
 
+@AndroidEntryPoint
 class PhotoFragment : Fragment() {
 
     private lateinit var binding: FragmentPhotoBinding
-    private val galleryViewModel: GalleryViewModel by inject()
+    private val galleryViewModel: GalleryViewModel by activityViewModels()
     private var url: String? = null
 
     override fun onCreateView(

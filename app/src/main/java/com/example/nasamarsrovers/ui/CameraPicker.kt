@@ -4,11 +4,14 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.CURIOSITY
 
-class CameraPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment() {
+class CameraPicker : DialogFragment() {
+
+    private val galleryViewModel: GalleryViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreate(savedInstanceState)

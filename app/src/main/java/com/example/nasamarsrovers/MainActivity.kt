@@ -1,6 +1,7 @@
 package com.example.nasamarsrovers
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -19,12 +20,13 @@ import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
 import com.google.android.material.navigation.NavigationView
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val galleryViewModel: GalleryViewModel by inject()
+    private val galleryViewModel: GalleryViewModel by viewModels()
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +45,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpObservers() {
-        galleryViewModel.currentRover.observe(this, { supportActionBar?.title = it })
-        galleryViewModel.currentCamera.observe(this, { supportActionBar?.subtitle = "Camera: $it" })
+        galleryViewModel.currentRover.observe(this) { supportActionBar?.title = it }
+        galleryViewModel.currentCamera.observe(this) { supportActionBar?.subtitle = "Camera: $it" }
     }
 
     private fun setUpNavView() {
@@ -93,19 +95,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchSolPicker(): Boolean {
-        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
+        SolPicker().show(supportFragmentManager, "SOL_PICKER")
         closeDrawer()
         return true
     }
 
     private fun launchCameraPicker(): Boolean {
-        CameraPicker(galleryViewModel).show(supportFragmentManager, "CAMERA_PICKER")
+        CameraPicker().show(supportFragmentManager, "CAMERA_PICKER")
         closeDrawer()
         return true
     }
 
     private fun launchDatePicker(): Boolean {
-        val datePicker = DatePickerDialog(galleryViewModel)
+        val datePicker = DatePickerDialog()
         datePicker.show(supportFragmentManager, "EARTH_DATE_DIALOG")
         closeDrawer()
         return true
