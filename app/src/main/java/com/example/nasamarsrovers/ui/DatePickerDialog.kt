@@ -6,14 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.DATE_FORMAT
 import java.util.*
 
-class DatePickerDialog(private val galleryViewModel: GalleryViewModel) : DialogFragment(),
+class DatePickerDialog : DialogFragment(),
     DatePickerDialog.OnDateSetListener {
 
     private val calendar = Calendar.getInstance()
+    private val galleryViewModel: GalleryViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

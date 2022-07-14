@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpObservers() {
-        galleryViewModel.currentRover.observe(this, { supportActionBar?.title = it })
-        galleryViewModel.currentCamera.observe(this, { supportActionBar?.subtitle = "Camera: $it" })
+        galleryViewModel.currentRover.observe(this) { supportActionBar?.title = it }
+        galleryViewModel.currentCamera.observe(this) { supportActionBar?.subtitle = "Camera: $it" }
     }
 
     private fun setUpNavView() {
@@ -95,19 +95,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchSolPicker(): Boolean {
-        SolPicker(galleryViewModel).show(supportFragmentManager, "SOL_PICKER")
+        SolPicker().show(supportFragmentManager, "SOL_PICKER")
         closeDrawer()
         return true
     }
 
     private fun launchCameraPicker(): Boolean {
-        CameraPicker(galleryViewModel).show(supportFragmentManager, "CAMERA_PICKER")
+        CameraPicker().show(supportFragmentManager, "CAMERA_PICKER")
         closeDrawer()
         return true
     }
 
     private fun launchDatePicker(): Boolean {
-        val datePicker = DatePickerDialog(galleryViewModel)
+        val datePicker = DatePickerDialog()
         datePicker.show(supportFragmentManager, "EARTH_DATE_DIALOG")
         closeDrawer()
         return true

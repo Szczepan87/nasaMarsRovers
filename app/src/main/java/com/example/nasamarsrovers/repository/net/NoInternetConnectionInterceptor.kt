@@ -2,12 +2,12 @@ package com.example.nasamarsrovers.repository.net
 
 import android.content.Context
 import android.net.ConnectivityManager
-import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class NoInternetConnectionInterceptor @Inject constructor(@ActivityContext context: Context): Interceptor {
+class NoInternetConnectionInterceptor @Inject constructor(@ApplicationContext context: Context): Interceptor {
 
     private val appContext = context.applicationContext
 

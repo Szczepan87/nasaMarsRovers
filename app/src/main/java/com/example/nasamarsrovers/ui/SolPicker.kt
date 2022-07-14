@@ -7,19 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.DialogSolPickerBinding
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class SolPicker(private val galleryViewModel: GalleryViewModel) : DialogFragment() {
+@AndroidEntryPoint
+class SolPicker : DialogFragment() {
 
     private lateinit var binding: DialogSolPickerBinding
+    private val galleryViewModel: GalleryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_sol_picker, container, false)
         return binding.root
     }

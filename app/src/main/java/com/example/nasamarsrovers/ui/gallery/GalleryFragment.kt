@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.nasamarsrovers.R
@@ -21,7 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class GalleryFragment : Fragment() {
 
-    private val galleryViewModel: GalleryViewModel by viewModels()
+    private val galleryViewModel: GalleryViewModel by activityViewModels()
     private lateinit var binding: FragmentGalleryBinding
     private val galleryRecyclerAdapter: PhotosRecyclerAdapter by lazy { PhotosRecyclerAdapter(::onPhotoClick) }
 
@@ -54,26 +54,26 @@ class GalleryFragment : Fragment() {
 
     @ExperimentalCoroutinesApi
     private fun setUpObservers() {
-        galleryViewModel.listOfPhotos.observe(viewLifecycleOwner, Observer {
+        galleryViewModel.listOfPhotos.observe(viewLifecycleOwner) {
             galleryRecyclerAdapter.updateList(it)
-        })
-        galleryViewModel.currentSol.observe(viewLifecycleOwner, Observer {
+        }
+        galleryViewModel.currentSol.observe(viewLifecycleOwner) {
             galleryViewModel.updatePhotosList()
-        })
-        galleryViewModel.currentEarthDate.observe(viewLifecycleOwner, Observer {
+        }
+        galleryViewModel.currentEarthDate.observe(viewLifecycleOwner) {
             galleryViewModel.updatePhotosList()
-        })
-        galleryViewModel.currentRover.observe(viewLifecycleOwner, Observer {
+        }
+        galleryViewModel.currentRover.observe(viewLifecycleOwner) {
             galleryViewModel.updatePhotosList()
-        })
-        galleryViewModel.currentCamera.observe(viewLifecycleOwner, Observer {
+        }
+        galleryViewModel.currentCamera.observe(viewLifecycleOwner) {
             galleryViewModel.updatePhotosList()
-        })
-        galleryViewModel.repositoryError.observe(viewLifecycleOwner, Observer {
+        }
+        galleryViewModel.repositoryError.observe(viewLifecycleOwner) {
             if (it != null) {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
