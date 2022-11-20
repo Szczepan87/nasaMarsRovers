@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
+import com.example.nasamarsrovers.repository.net.RoverQueryParameters
 import com.example.nasamarsrovers.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -55,6 +55,7 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
     var isEarthDateUsed = false
 
     var roverPhotosObserver = Observer<List<Photo>> { _listOfPhotos.postValue(it) }
+    var currentPage: Int = 1
 
     init {
         repository.roverPhotos.observeForever(roverPhotosObserver)
@@ -66,26 +67,29 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
         getMaxEarthDateForRover()
         getLandingDateForRover()
         viewModelScope.launch {
-            if (isEarthDateUsed) {
-                repository.getPhotosFlow(
-                    currentRover.value ?: CURIOSITY,
-                    currentEarthDate.value ?: DEFAULT_DATE,
-                    currentCamera.value ?: DEFAULT_CAMERA
-                )
-                    .onStart { doOnStart() }
-                    .catch { error -> doOnError(error) }
-                    .collect { list -> doOnCollect(list) }
-            } else {
-                repository.getPhotosFlow(
-                    currentRover.value ?: CURIOSITY,
-                    currentSol.value ?: DEFAULT_SOL,
-                    currentCamera.value ?: DEFAULT_CAMERA
-                )
-                    .onStart { doOnStart() }
-                    .catch { error -> doOnError(error) }
-                    .collect { list -> doOnCollect(list) }
-            }
+            val params = getRoverQueryParams()
+            repository.getPhotosFlow(params)
+                .onStart { doOnStart() }
+                .catch { error -> doOnError(error) }
+                .collect { list -> doOnCollect(list) }
         }
+    }
+
+    private fun getRoverQueryParams(): RoverQueryParameters {
+        val params = if (isEarthDateUsed) {
+            RoverQueryParameters(
+                rover = currentRover.value ?: CURIOSITY,
+                earthDate = currentEarthDate.value ?: DEFAULT_DATE,
+                camera = currentCamera.value ?: DEFAULT_CAMERA
+            )
+        } else {
+            RoverQueryParameters(
+                rover = currentRover.value ?: CURIOSITY,
+                sol = currentSol.value ?: DEFAULT_SOL,
+                camera = currentCamera.value ?: DEFAULT_CAMERA
+            )
+        }
+        return params
     }
 
     private fun doOnStart() {
@@ -102,7 +106,7 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
     private fun doOnCollect(list: List<Photo>) {
         _listOfPhotos.postValue(list)
         _isLoading.postValue(false)
-        if (list.isNullOrEmpty()) {
+        if (list.isEmpty()) {
             _isListEmpty.postValue(true)
         } else {
             _isListEmpty.postValue(false)
