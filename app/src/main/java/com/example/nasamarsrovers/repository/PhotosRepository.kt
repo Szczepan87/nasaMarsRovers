@@ -1,7 +1,5 @@
 package com.example.nasamarsrovers.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.net.RoverQueryParameters
 import com.example.nasamarsrovers.repository.net.interfaces.RoverApi
@@ -10,17 +8,10 @@ import com.example.nasamarsrovers.utils.DEFAULT_DATE
 import com.example.nasamarsrovers.utils.DEFAULT_SOL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class PhotosRepository @Inject constructor(private val roverApi: RoverApi) {
-
-    private val _roverPhotos = MutableLiveData<List<Photo>>()
-    val roverPhotos: LiveData<List<Photo>>
-        get() = _roverPhotos
 
     @ExperimentalCoroutinesApi
     fun getPhotosFlow(params: RoverQueryParameters): Flow<List<Photo>> {
@@ -34,7 +25,7 @@ class PhotosRepository @Inject constructor(private val roverApi: RoverApi) {
             params.earthDate != null -> {
                 getFlowByDateAndCamera(params)
             }
-            else -> emptyFlow()
+            else -> flowOf(listOf())
         }
     }
 

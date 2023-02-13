@@ -1,7 +1,10 @@
 package com.example.nasamarsrovers.ui.gallery
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.repository.net.RoverQueryParameters
@@ -54,26 +57,41 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
 
     var isEarthDateUsed = false
 
-    var roverPhotosObserver = Observer<List<Photo>> { _listOfPhotos.postValue(it) }
-    var currentPage: Int = 1
-
-    init {
-        repository.roverPhotos.observeForever(roverPhotosObserver)
-    }
+    private var currentPage: Int = 1
 
     @ExperimentalCoroutinesApi
-    fun updatePhotosList() {
+    fun loadFirstPage() {
         getMaxSolForRover()
         getMaxEarthDateForRover()
         getLandingDateForRover()
+        currentPage = 1
         viewModelScope.launch {
             val params = getRoverQueryParams()
             repository.getPhotosFlow(params)
                 .onStart { doOnStart() }
                 .catch { error -> doOnError(error) }
-                .collect { list -> doOnCollect(list) }
+                .collect { list -> doOnCollect(list, true) }
         }
     }
+
+    @ExperimentalCoroutinesApi
+    fun loadNextPage() {
+        viewModelScope.launch {
+            currentPage = currentPage.inc()
+            val params = getRoverQueryParams().copy(page = currentPage)
+            repository.getPhotosFlow(params)
+                .onStart { doOnStart() }
+                .catch { error ->
+                    currentPage = currentPage.dec()
+                    doOnError(error)
+                }
+                .collect { list ->
+                    if (list.isEmpty()) currentPage = currentPage.dec()
+                    doOnCollect(list, false)
+                }
+        }
+    }
+
 
     private fun getRoverQueryParams(): RoverQueryParameters {
         val params = if (isEarthDateUsed) {
@@ -103,14 +121,19 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
         _isListEmpty.postValue(true)
     }
 
-    private fun doOnCollect(list: List<Photo>) {
-        _listOfPhotos.postValue(list)
-        _isLoading.postValue(false)
-        if (list.isEmpty()) {
+    private fun doOnCollect(list: List<Photo>, shouldClearPreviousPage: Boolean) {
+        if (shouldClearPreviousPage) {
+            _listOfPhotos.postValue(list)
+        } else {
+            val currentList = _listOfPhotos.value ?: emptyList()
+            _listOfPhotos.postValue(currentList.plus(list))
+        }
+        if (list.isEmpty() && shouldClearPreviousPage) {
             _isListEmpty.postValue(true)
         } else {
             _isListEmpty.postValue(false)
         }
+        _isLoading.postValue(false)
     }
 
     fun setCurrentRover(roverName: String) {
@@ -181,10 +204,5 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
                 .catch { doOnError(it) }
                 .collect { _landingDate.value = it }
         }
-    }
-
-    override fun onCleared() {
-        repository.roverPhotos.removeObserver(roverPhotosObserver)
-        super.onCleared()
     }
 }
