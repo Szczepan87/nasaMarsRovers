@@ -20,5 +20,5 @@
     <string name="opportunity">Opportunity</string>
     <string name="spirit">Spirit</string>
     <string name="camera">Camera</string>
-    <string name="empty_list_info">No photos for this day or rover</string>
+    <string name="empty_list_info">No photos for this day, camera or rover</string>
 </resources>

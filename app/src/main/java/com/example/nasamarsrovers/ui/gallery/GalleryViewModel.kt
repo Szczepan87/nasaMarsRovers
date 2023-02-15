@@ -1,6 +1,5 @@
 package com.example.nasamarsrovers.ui.gallery
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.nasamarsrovers.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.repository.net.RoverQueryParameters
+import com.example.nasamarsrovers.usecase.GetAllPhotosFlowUseCase
+import com.example.nasamarsrovers.usecase.GetPhotosFlowUseCase
 import com.example.nasamarsrovers.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +18,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryViewModel @Inject constructor(private val repository: PhotosRepository) : ViewModel() {
+class GalleryViewModel @Inject constructor(
+    private val getAllPhotosFlowUseCase: GetAllPhotosFlowUseCase,
+    private val getPhotosFlowUseCase: GetPhotosFlowUseCase,
+    private val repository: PhotosRepository
+) : ViewModel() {
     companion object {
         private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000
     }
@@ -56,7 +61,7 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
     val landingDate = _landingDate
 
     var isEarthDateUsed = false
-
+    private var shouldLoadNextPage: Boolean = true
     private var currentPage: Int = 1
 
     @ExperimentalCoroutinesApi
@@ -67,7 +72,7 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
         currentPage = 1
         viewModelScope.launch {
             val params = getRoverQueryParams()
-            repository.getPhotosFlow(params)
+            getPhotosFlowUseCase(params, currentPage)
                 .onStart { doOnStart() }
                 .catch { error -> doOnError(error) }
                 .collect { list -> doOnCollect(list, true) }
@@ -77,21 +82,21 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
     @ExperimentalCoroutinesApi
     fun loadNextPage() {
         viewModelScope.launch {
+            if (!shouldLoadNextPage) return@launch
             currentPage = currentPage.inc()
-            val params = getRoverQueryParams().copy(page = currentPage)
-            repository.getPhotosFlow(params)
+            val params = getRoverQueryParams()
+            getPhotosFlowUseCase(params, currentPage)
                 .onStart { doOnStart() }
                 .catch { error ->
                     currentPage = currentPage.dec()
                     doOnError(error)
                 }
                 .collect { list ->
-                    if (list.isEmpty()) currentPage = currentPage.dec()
+                    if (list.isEmpty()) shouldLoadNextPage = false
                     doOnCollect(list, false)
                 }
         }
     }
-
 
     private fun getRoverQueryParams(): RoverQueryParameters {
         val params = if (isEarthDateUsed) {
@@ -124,42 +129,45 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
     private fun doOnCollect(list: List<Photo>, shouldClearPreviousPage: Boolean) {
         if (shouldClearPreviousPage) {
             _listOfPhotos.postValue(list)
+            _isListEmpty.postValue(list.isEmpty())
         } else {
             val currentList = _listOfPhotos.value ?: emptyList()
             _listOfPhotos.postValue(currentList.plus(list))
-        }
-        if (list.isEmpty() && shouldClearPreviousPage) {
-            _isListEmpty.postValue(true)
-        } else {
-            _isListEmpty.postValue(false)
+            _isListEmpty.postValue(currentList.isEmpty())
         }
         _isLoading.postValue(false)
     }
 
     fun setCurrentRover(roverName: String) {
         _currentRover.postValue(roverName)
+        shouldLoadNextPage = true
     }
 
     fun setSol(solNo: Int) {
         _currentSol.postValue(solNo)
+        shouldLoadNextPage = true
     }
 
     fun setCurrentCamera(currentCamera: String) {
         _currentCamera.postValue(currentCamera)
+        shouldLoadNextPage = true
     }
 
     fun setEarthDate(date: String) {
         _currentEarthDate.postValue(date)
+        shouldLoadNextPage = true
     }
 
     fun increaseSolByOne() {
         val currentSol = _currentSol.value ?: 0
         setSol(currentSol + 1)
+        shouldLoadNextPage = true
     }
 
     fun decreaseSolByOne() {
         val currentSol = _currentSol.value ?: 0
         if (currentSol > 0) setSol(currentSol - 1) else return
+        shouldLoadNextPage = true
     }
 
     fun nextEarthDay() {
@@ -167,6 +175,7 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
         val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
         val nextDayInMillis = date.time.plus(ONE_DAY_IN_MILLIS)
         _currentEarthDate.value = DATE_FORMAT.format(nextDayInMillis)
+        shouldLoadNextPage = true
     }
 
     fun previousEarthDate() {
@@ -174,6 +183,7 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
         val date = DATE_FORMAT.parse(currentEarthDateString) ?: return
         val previousDayInMillis = date.time.minus(ONE_DAY_IN_MILLIS)
         _currentEarthDate.value = DATE_FORMAT.format(previousDayInMillis)
+        shouldLoadNextPage = true
     }
 
     @ExperimentalCoroutinesApi
@@ -182,7 +192,6 @@ class GalleryViewModel @Inject constructor(private val repository: PhotosReposit
             repository.getMaxSolForRover(currentRover.value ?: CURIOSITY)
                 .catch { doOnError(it) }
                 .collect {
-                    Log.d("VIEW MODEL ", "MAX SOL: $it")
                     _maxSolForRover.value = it
                 }
         }

@@ -17,11 +17,18 @@ interface RoverApi {
     ): PhotosResponse
 
     @GET("rovers/{rover}/photos?&api_key=$API_KEY")
+    suspend fun getPhotosByDate(
+        @Path("rover") rover: String,
+        @Query("earth_date") date: String,
+        @Query("page") page: Int
+    ): PhotosResponse
+
+    @GET("rovers/{rover}/photos?&api_key=$API_KEY")
     suspend fun getPhotosBySolAndCamera(
         @Path("rover") rover: String,
         @Query("sol") sol: Int,
         @Query("camera") camera: String,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int
     ): PhotosResponse
 
     @GET("rovers/{rover}/photos?&api_key=$API_KEY")
@@ -29,7 +36,7 @@ interface RoverApi {
         @Path("rover") rover: String,
         @Query("earth_date") date: String,
         @Query("camera") camera: String,
-        @Query("page") page: Int = 1
+        @Query("page") page: Int
     ): PhotosResponse
 
     @GET("manifests/{rover}?api_key=$API_KEY")
