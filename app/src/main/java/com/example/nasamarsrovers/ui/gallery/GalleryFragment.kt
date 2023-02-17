@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.nasamarsrovers.R
 import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.OnSwipeTouchListener
@@ -24,7 +26,6 @@ class GalleryFragment : Fragment() {
     private val galleryViewModel: GalleryViewModel by activityViewModels()
     private lateinit var binding: FragmentGalleryBinding
     private val galleryRecyclerAdapter: PhotosRecyclerAdapter by lazy { PhotosRecyclerAdapter(::onPhotoClick) }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,12 +40,32 @@ class GalleryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setOnSwipeListener()
-        galleryViewModel.updatePhotosList()
+        galleryViewModel.loadFirstPage()
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
+            setOverscrollListener()
         }
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun FragmentGalleryBinding.setOverscrollListener() {
+        val layoutManager: LinearLayoutManager =
+            galleryRecycler.layoutManager as? LinearLayoutManager ?: return
+        val adapter = galleryRecycler.adapter
+        galleryRecycler.addOnScrollListener(object : OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val position = layoutManager.findLastVisibleItemPosition()
+                val items = adapter?.itemCount ?: 0
+
+                if (position >= items.dec()) {
+                    viewModel?.loadNextPage()
+                }
+            }
+        })
     }
 
     private fun onPhotoClick(stringUrl: String?) {
@@ -55,19 +76,19 @@ class GalleryFragment : Fragment() {
     @ExperimentalCoroutinesApi
     private fun setUpObservers() {
         galleryViewModel.listOfPhotos.observe(viewLifecycleOwner) {
-            galleryRecyclerAdapter.updateList(it)
+            galleryRecyclerAdapter.submitList(it)
         }
         galleryViewModel.currentSol.observe(viewLifecycleOwner) {
-            galleryViewModel.updatePhotosList()
+            galleryViewModel.loadFirstPage()
         }
         galleryViewModel.currentEarthDate.observe(viewLifecycleOwner) {
-            galleryViewModel.updatePhotosList()
+            galleryViewModel.loadFirstPage()
         }
         galleryViewModel.currentRover.observe(viewLifecycleOwner) {
-            galleryViewModel.updatePhotosList()
+            galleryViewModel.loadFirstPage()
         }
         galleryViewModel.currentCamera.observe(viewLifecycleOwner) {
-            galleryViewModel.updatePhotosList()
+            galleryViewModel.loadFirstPage()
         }
         galleryViewModel.repositoryError.observe(viewLifecycleOwner) {
             if (it != null) {

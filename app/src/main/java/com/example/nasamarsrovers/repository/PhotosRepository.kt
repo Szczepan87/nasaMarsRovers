@@ -1,59 +1,83 @@
 package com.example.nasamarsrovers.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.example.nasamarsrovers.model.Photo
+import com.example.nasamarsrovers.di.IODispatcher
+import com.example.nasamarsrovers.repository.net.RoverQueryParameters
 import com.example.nasamarsrovers.repository.net.interfaces.RoverApi
-import kotlinx.coroutines.Dispatchers
+import com.example.nasamarsrovers.utils.DEFAULT_CAMERA
+import com.example.nasamarsrovers.utils.DEFAULT_DATE
+import com.example.nasamarsrovers.utils.DEFAULT_SOL
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import retrofit2.Retrofit
 import javax.inject.Inject
 
-class PhotosRepository @Inject constructor(private val roverApi: RoverApi) {
+class PhotosRepository @Inject constructor(
+    @IODispatcher private val coroutineDispatcher: CoroutineDispatcher,
+    private val roverApi: RoverApi
+) {
+    fun getFlowByDateAndCamera(params: RoverQueryParameters, page: Int) =
+        flow {
+            emit(
+                roverApi.getPhotosByDateAndCamera(
+                    rover = params.rover,
+                    camera = params.camera ?: DEFAULT_CAMERA,
+                    date = params.earthDate ?: DEFAULT_DATE,
+                    page = page
+                ).photos ?: emptyList()
+            )
+        }.flowOn(coroutineDispatcher)
 
-    private val _roverPhotos = MutableLiveData<List<Photo>>()
-    val roverPhotos: LiveData<List<Photo>>
-        get() = _roverPhotos
+    fun getFlowBySolAndCamera(params: RoverQueryParameters, page: Int) =
+        flow {
+            emit(
+                roverApi.getPhotosBySolAndCamera(
+                    rover = params.rover,
+                    sol = params.sol ?: DEFAULT_SOL,
+                    camera = params.camera ?: DEFAULT_CAMERA,
+                    page = page
+                ).photos ?: emptyList()
+            )
+        }.flowOn(coroutineDispatcher)
 
-    @ExperimentalCoroutinesApi
-    fun getPhotosFlow(roverName: String, sol: Int, camera: String): Flow<List<Photo>> {
-        return flow {
-            val list = roverApi.getPhotosBySolAndCamera(roverName, sol, camera).photos
-                ?: emptyList()
-            emit(list)
-        }.flowOn(Dispatchers.IO)
-    }
-
-    @ExperimentalCoroutinesApi
-    fun getPhotosFlow(roverName: String, date: String, camera: String): Flow<List<Photo>> {
-        return flow {
-            val list = roverApi.getPhotosByDateAndCamera(roverName, date, camera).photos
-                ?: emptyList()
-            emit(list)
-        }.flowOn(Dispatchers.IO)
-    }
+    fun getFlowForNoCamera(params: RoverQueryParameters, page: Int) =
+        flow {
+            emit(
+                if (params.earthDate == null) {
+                    roverApi.getPhotosBySol(
+                        rover = params.rover,
+                        sol = params.sol ?: DEFAULT_SOL,
+                        page = page
+                    ).photos ?: emptyList()
+                } else {
+                    roverApi.getPhotosByDate(
+                        rover = params.rover,
+                        date = params.earthDate,
+                        page = page
+                    ).photos ?: emptyList()
+                }
+            )
+        }.flowOn(coroutineDispatcher)
 
     @ExperimentalCoroutinesApi
     fun getMaxSolForRover(roverName: String): Flow<Int> {
         return flow {
             emit(roverApi.getRoverManifest(roverName).photoManifest?.maxSol ?: 0)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(coroutineDispatcher)
     }
 
     @ExperimentalCoroutinesApi
     fun getMaxEarthDateForRover(roverName: String): Flow<String> {
         return flow {
             emit(roverApi.getRoverManifest(roverName).photoManifest?.maxDate.orEmpty())
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(coroutineDispatcher)
     }
 
     @ExperimentalCoroutinesApi
     fun getLandingDateForRover(roverName: String): Flow<String> {
         return flow {
             emit(roverApi.getRoverManifest(roverName).photoManifest?.landingDate.orEmpty())
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(coroutineDispatcher)
     }
 }
