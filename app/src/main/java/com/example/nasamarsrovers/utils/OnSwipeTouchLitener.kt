@@ -35,13 +35,13 @@ open class OnSwipeTouchListener(ctx: Context) : OnTouchListener {
         }
 
         override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
+            e1: MotionEvent,
+            e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
+            // TODO for some reason the motion events can be nulls
             var result = false
-            if (e1 == null || e2 == null) return result
             try {
                 val diffY = e2.y - e1.y
                 val diffX = e2.x - e1.x
@@ -55,14 +55,6 @@ open class OnSwipeTouchListener(ctx: Context) : OnTouchListener {
                         result = true
                     }
                 }
-//                else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-//                    if (diffY > 0) {
-//                        onSwipeBottom()
-//                    } else {
-//                        onSwipeTop()
-//                    }
-//                    result = true
-//                }
             } catch (exception: Exception) {
                 exception.printStackTrace()
             }
