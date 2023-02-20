@@ -30,7 +30,7 @@
             tools:itemCount="12"
             tools:listitem="@layout/photo_card" />
 
-        <TextView
+         <TextView
             android:id="@+id/galleryEmptyListInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,8 +41,9 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#66000000"
-            app:visible="@{safeUnbox(viewModel.isLoading)}">
+            android:background="@color/colorDisabledBackground"
+            app:visible="@{safeUnbox(viewModel.isLoading)}"
+            android:clickable="@{safeUnbox(viewModel.isLoading())}">
 
             <ProgressBar
                 android:id="@+id/galleryProgressBar"
