@@ -8,6 +8,7 @@
         <item>MAHLI</item>
         <item>MARDI</item>
         <item>NAVCAM</item>
+        <item>ALL</item>
     </array>
     <array name="spirit_and_opportunity_cameras">
         <item>FHAZ</item>
@@ -15,6 +16,7 @@
         <item>NAVCAM</item>
         <item>PANCAM</item>
         <item>MINITES</item>
+        <item>ALL</item>
     </array>
 
 </resources>

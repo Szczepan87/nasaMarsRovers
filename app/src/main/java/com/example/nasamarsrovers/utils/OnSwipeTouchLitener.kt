@@ -5,11 +5,9 @@ import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import kotlin.math.abs
 
-
-open class OnSwipeTouchListener(ctx: Context) : OnTouchListener {
+open class OnSwipeTouchListener(ctx: Context) : View.OnTouchListener {
 
     private val gestureDetector: GestureDetector
 
@@ -29,20 +27,21 @@ open class OnSwipeTouchListener(ctx: Context) : OnTouchListener {
 
     private inner class GestureListener : SimpleOnGestureListener() {
 
-
         override fun onDown(e: MotionEvent): Boolean {
             return true
         }
 
+        @Suppress("NOTHING_TO_OVERRIDE", "ACCIDENTAL_OVERRIDE")
         override fun onFling(
-            e1: MotionEvent,
+            e1: MotionEvent?,
             e2: MotionEvent,
             velocityX: Float,
             velocityY: Float
         ): Boolean {
-            // TODO for some reason the motion events can be nulls
+            // the motion event can be nulls https://issuetracker.google.com/issues/206855618
             var result = false
             try {
+                if (e1 == null) return result
                 val diffY = e2.y - e1.y
                 val diffX = e2.x - e1.x
                 if (abs(diffX) > abs(diffY)) {
