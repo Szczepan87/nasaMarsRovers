@@ -30,8 +30,8 @@ class GalleryViewModel @Inject constructor(
     private val _currentRover = MutableLiveData<String>()
     val currentRover: LiveData<String> = _currentRover
 
-    private val _currentCamera = MutableLiveData<String>()
-    val currentCamera: LiveData<String> = _currentCamera
+    private val _currentCamera = MutableLiveData<String?>()
+    val currentCamera: LiveData<String?> = _currentCamera
 
     private val _currentSol = MutableLiveData<Int>()
     val currentSol: LiveData<Int> = _currentSol
@@ -72,10 +72,17 @@ class GalleryViewModel @Inject constructor(
         currentPage = 1
         viewModelScope.launch {
             val params = getRoverQueryParams()
-            getPhotosFlowUseCase(params, currentPage)
-                .onStart { doOnStart() }
-                .catch { error -> doOnError(error) }
-                .collect { list -> doOnCollect(list, true) }
+            if (params.camera == null) {
+                getAllPhotosFlowUseCase(params, currentPage)
+                    .onStart { doOnStart() }
+                    .catch { error -> doOnError(error) }
+                    .collect { list -> doOnCollect(list, true) }
+            } else {
+                getPhotosFlowUseCase(params, currentPage)
+                    .onStart { doOnStart() }
+                    .catch { error -> doOnError(error) }
+                    .collect { list -> doOnCollect(list, true) }
+            }
         }
     }
 
@@ -85,16 +92,29 @@ class GalleryViewModel @Inject constructor(
             if (!shouldLoadNextPage) return@launch
             currentPage = currentPage.inc()
             val params = getRoverQueryParams()
-            getPhotosFlowUseCase(params, currentPage)
-                .onStart { doOnStart() }
-                .catch { error ->
-                    currentPage = currentPage.dec()
-                    doOnError(error)
-                }
-                .collect { list ->
-                    if (list.isEmpty()) shouldLoadNextPage = false
-                    doOnCollect(list, false)
-                }
+            if (params.camera == null) {
+                getAllPhotosFlowUseCase(params, currentPage)
+                    .onStart { doOnStart() }
+                    .catch { error ->
+                        currentPage = currentPage.dec()
+                        doOnError(error)
+                    }
+                    .collect { list ->
+                        if (list.isEmpty()) shouldLoadNextPage = false
+                        doOnCollect(list, false)
+                    }
+            } else {
+                getPhotosFlowUseCase(params, currentPage)
+                    .onStart { doOnStart() }
+                    .catch { error ->
+                        currentPage = currentPage.dec()
+                        doOnError(error)
+                    }
+                    .collect { list ->
+                        if (list.isEmpty()) shouldLoadNextPage = false
+                        doOnCollect(list, false)
+                    }
+            }
         }
     }
 
@@ -103,13 +123,13 @@ class GalleryViewModel @Inject constructor(
             RoverQueryParameters(
                 rover = currentRover.value ?: CURIOSITY,
                 earthDate = currentEarthDate.value ?: DEFAULT_DATE,
-                camera = currentCamera.value ?: DEFAULT_CAMERA
+                camera = currentCamera.value
             )
         } else {
             RoverQueryParameters(
                 rover = currentRover.value ?: CURIOSITY,
                 sol = currentSol.value ?: DEFAULT_SOL,
-                camera = currentCamera.value ?: DEFAULT_CAMERA
+                camera = currentCamera.value
             )
         }
         return params
@@ -148,8 +168,12 @@ class GalleryViewModel @Inject constructor(
         shouldLoadNextPage = true
     }
 
-    fun setCurrentCamera(currentCamera: String) {
-        _currentCamera.postValue(currentCamera)
+    fun setCurrentCamera(currentCamera: String?) {
+        if (currentCamera == "ALL") {
+            _currentCamera.postValue(null)
+        } else {
+            _currentCamera.postValue(currentCamera)
+        }
         shouldLoadNextPage = true
     }
 
