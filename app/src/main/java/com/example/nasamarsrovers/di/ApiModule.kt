@@ -45,7 +45,7 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideNoInternetConnectionInterceptor(@ApplicationContext context: Context): NoInternetConnectionInterceptor{
+    fun provideNoInternetConnectionInterceptor(@ApplicationContext context: Context): NoInternetConnectionInterceptor {
         return NoInternetConnectionInterceptor(context)
     }
 }

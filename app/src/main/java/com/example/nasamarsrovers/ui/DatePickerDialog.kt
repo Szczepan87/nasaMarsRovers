@@ -11,19 +11,18 @@ import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.DATE_FORMAT
 import java.util.*
 
-class DatePickerDialog : DialogFragment(),
+class DatePickerDialog :
+    DialogFragment(),
     DatePickerDialog.OnDateSetListener {
 
     private val calendar = Calendar.getInstance()
     private val galleryViewModel: GalleryViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val maxStringDate = galleryViewModel.maxEarthDate.value
         val maxYear = maxStringDate?.split("-")?.first()?.toInt()
         val maxMonth = maxStringDate?.split("-")?.get(1)?.toInt()?.minus(1)
         val maxDay = maxStringDate?.split("-")?.last()?.toInt()
-
 
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)

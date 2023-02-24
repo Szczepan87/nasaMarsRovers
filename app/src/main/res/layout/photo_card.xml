@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -14,9 +14,9 @@
         android:id="@+id/photoCardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/photo_card_background"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/photo_card_background">
 
         <ImageView
             android:id="@+id/cardPhotoImageView"
@@ -39,7 +39,7 @@
             app:layout_constraintBottom_toTopOf="@+id/cardPhotoImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Earth date: 2012-08-06"/>
+            tools:text="Earth date: 2012-08-06" />
 
         <TextView
             android:id="@+id/cardPhotoSolNumberText"
@@ -54,7 +54,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardPhotoImageView"
             app:sol="@{photo.sol}"
-            tools:text="Sol: 0"/>
+            tools:text="Sol: 0" />
 
         <ProgressBar
             android:id="@+id/cardPhotoProgressBar"

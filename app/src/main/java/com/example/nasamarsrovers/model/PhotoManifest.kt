@@ -1,6 +1,5 @@
 package com.example.nasamarsrovers.model
 
-
 import com.google.gson.annotations.SerializedName
 
 data class PhotoManifest(
