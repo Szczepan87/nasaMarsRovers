@@ -1,7 +1,7 @@
 package com.example.nasamarsrovers.repository.net.interfaces
 
-import com.example.nasamarsrovers.model.PhotoManifestResponse
-import com.example.nasamarsrovers.model.PhotosResponse
+import com.example.domain.model.PhotoManifestResponse
+import com.example.domain.model.PhotosResponse
 import com.example.nasamarsrovers.utils.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Path

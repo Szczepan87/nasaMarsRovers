@@ -1,5 +1,6 @@
-package com.example.nasamarsrovers.model
+package com.example.domain.model
 
+import com.example.domain.model.CameraHardware
 import com.google.gson.annotations.SerializedName
 
 data class Rover(

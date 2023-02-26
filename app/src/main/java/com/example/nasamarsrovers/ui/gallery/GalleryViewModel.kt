@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nasamarsrovers.model.Photo
+import com.example.domain.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.repository.net.RoverQueryParameters
 import com.example.nasamarsrovers.usecase.GetAllPhotosFlowUseCase

@@ -1,4 +1,4 @@
-package com.example.nasamarsrovers.model
+package com.example.domain.model
 
 import com.google.gson.annotations.SerializedName
 

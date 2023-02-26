@@ -1,2 +1,6 @@
 include ':app'
 rootProject.name = "NASA Mars Rovers"
+include ':domain'
+include ':resources'
+include ':data'
+include ':ui'

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasamarsrovers.databinding.PhotoCardBinding
-import com.example.nasamarsrovers.model.Photo
+import com.example.domain.model.Photo
 
 class PhotosRecyclerAdapter(private val onItemCLick: ((String?) -> Unit)) :
     ListAdapter<Photo, PhotosRecyclerAdapter.PhotosViewHolder>(object :

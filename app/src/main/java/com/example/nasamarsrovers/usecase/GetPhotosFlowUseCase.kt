@@ -1,6 +1,6 @@
 package com.example.nasamarsrovers.usecase
 
-import com.example.nasamarsrovers.model.Photo
+import com.example.domain.model.Photo
 import com.example.nasamarsrovers.repository.PhotosRepository
 import com.example.nasamarsrovers.repository.net.RoverQueryParameters
 import kotlinx.coroutines.flow.Flow

@@ -90,6 +90,11 @@ dependencies {
     //Touch ImageView
     implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
 
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":resources"))
+    implementation(project(":ui"))
+
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
 
     testImplementation 'junit:junit:4.13.2'
