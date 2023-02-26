@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.Photo
-import com.example.nasamarsrovers.repository.PhotosRepository
-import com.example.nasamarsrovers.repository.net.RoverQueryParameters
-import com.example.nasamarsrovers.usecase.GetAllPhotosFlowUseCase
-import com.example.nasamarsrovers.usecase.GetPhotosFlowUseCase
+import com.example.data.model.PhotoDTO
+import com.example.data.repository.PhotosRepository
+import com.example.data.model.RoverQueryParameters
+import com.example.domain.usecase.GetAllPhotosFlowUseCase
+import com.example.domain.usecase.GetPhotosFlowUseCase
 import com.example.nasamarsrovers.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,8 +39,8 @@ class GalleryViewModel @Inject constructor(
     private val _currentEarthDate = MutableLiveData<String>()
     val currentEarthDate: LiveData<String> = _currentEarthDate
 
-    private val _listOfPhotos = MutableLiveData<List<Photo>>()
-    val listOfPhotos: LiveData<List<Photo>> = _listOfPhotos
+    private val _listOfPhotos = MutableLiveData<List<PhotoDTO>>()
+    val listOfPhotos: LiveData<List<PhotoDTO>> = _listOfPhotos
 
     private val _repositoryError = MutableLiveData<String?>(null)
     val repositoryError: LiveData<String?> = _repositoryError
@@ -146,7 +146,7 @@ class GalleryViewModel @Inject constructor(
         _isListEmpty.postValue(true)
     }
 
-    private fun doOnCollect(list: List<Photo>, shouldClearPreviousPage: Boolean) {
+    private fun doOnCollect(list: List<PhotoDTO>, shouldClearPreviousPage: Boolean) {
         if (shouldClearPreviousPage) {
             _listOfPhotos.postValue(list)
             _isListEmpty.postValue(list.isEmpty())

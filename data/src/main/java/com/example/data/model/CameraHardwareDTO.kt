@@ -1,8 +1,8 @@
-package com.example.domain.model
+package com.example.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CameraHardware(
+data class CameraHardwareDTO(
     @SerializedName("full_name")
     val fullName: String?,
     @SerializedName("name")

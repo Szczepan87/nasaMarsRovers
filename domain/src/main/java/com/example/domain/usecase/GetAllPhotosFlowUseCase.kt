@@ -1,7 +1,7 @@
-package com.example.nasamarsrovers.usecase
+package com.example.domain.usecase
 
-import com.example.nasamarsrovers.repository.PhotosRepository
-import com.example.nasamarsrovers.repository.net.RoverQueryParameters
+import com.example.data.repository.PhotosRepository
+import com.example.data.model.RoverQueryParameters
 import javax.inject.Inject
 
 class GetAllPhotosFlowUseCase @Inject constructor(

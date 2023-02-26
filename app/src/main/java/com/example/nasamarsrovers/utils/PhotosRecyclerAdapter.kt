@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasamarsrovers.databinding.PhotoCardBinding
-import com.example.domain.model.Photo
+import com.example.data.model.PhotoDTO
 
 class PhotosRecyclerAdapter(private val onItemCLick: ((String?) -> Unit)) :
-    ListAdapter<Photo, PhotosRecyclerAdapter.PhotosViewHolder>(object :
-            DiffUtil.ItemCallback<Photo>() {
-            override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean =
+    ListAdapter<PhotoDTO, PhotosRecyclerAdapter.PhotosViewHolder>(object :
+            DiffUtil.ItemCallback<PhotoDTO>() {
+            override fun areItemsTheSame(oldItem: PhotoDTO, newItem: PhotoDTO): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean =
+            override fun areContentsTheSame(oldItem: PhotoDTO, newItem: PhotoDTO): Boolean =
                 oldItem.imgSrc == newItem.imgSrc
         }) {
 
@@ -33,7 +33,7 @@ class PhotosRecyclerAdapter(private val onItemCLick: ((String?) -> Unit)) :
 
         private var glideImageLoader: GlideImageLoader? = null
 
-        fun bind(photo: Photo) {
+        fun bind(photo: PhotoDTO) {
             binding.photo = photo
             glideImageLoader =
                 GlideImageLoader(binding.cardPhotoImageView, binding.cardPhotoProgressBar)

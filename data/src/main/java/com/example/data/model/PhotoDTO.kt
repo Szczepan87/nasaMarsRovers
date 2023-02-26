@@ -1,11 +1,10 @@
-package com.example.domain.model
+package com.example.data.model
 
-import com.example.domain.model.Camera
 import com.google.gson.annotations.SerializedName
 
-data class Photo(
+data class PhotoDTO(
     @SerializedName("camera")
-    val camera: Camera?,
+    val camera: CameraDTO?,
     @SerializedName("earth_date")
     val earthDate: String?,
     @SerializedName("id")
@@ -13,7 +12,7 @@ data class Photo(
     @SerializedName("img_src")
     val imgSrc: String?,
     @SerializedName("rover")
-    val rover: Rover?,
+    val rover: RoverDTO?,
     @SerializedName("sol")
     val sol: Int?
 )

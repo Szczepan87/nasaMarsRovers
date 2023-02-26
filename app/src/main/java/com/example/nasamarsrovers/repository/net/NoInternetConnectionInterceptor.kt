@@ -2,6 +2,7 @@ package com.example.nasamarsrovers.repository.net
 
 import android.content.Context
 import android.net.ConnectivityManager
+import com.example.data.exception.NoInternetConnectionException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Interceptor
 import okhttp3.Response

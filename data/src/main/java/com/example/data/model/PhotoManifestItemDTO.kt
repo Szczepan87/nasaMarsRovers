@@ -1,8 +1,8 @@
-package com.example.domain.model
+package com.example.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PhotoManifestItem(
+data class PhotoManifestItemDTO(
     @SerializedName("sol")
     val sol: Int?,
     @SerializedName("earth_date")

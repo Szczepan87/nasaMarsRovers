@@ -1,11 +1,10 @@
-package com.example.domain.model
+package com.example.data.model
 
-import com.example.domain.model.CameraHardware
 import com.google.gson.annotations.SerializedName
 
-data class Rover(
+data class RoverDTO(
     @SerializedName("cameras")
-    val cameras: List<CameraHardware>?,
+    val cameras: List<CameraHardwareDTO>?,
     @SerializedName("id")
     val id: Int?,
     @SerializedName("landing_date")

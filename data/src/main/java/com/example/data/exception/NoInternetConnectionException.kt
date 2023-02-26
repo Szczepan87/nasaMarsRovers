@@ -1,4 +1,4 @@
-package com.example.nasamarsrovers.repository.net
+package com.example.data.exception
 
 import java.io.IOException
 

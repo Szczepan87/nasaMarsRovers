@@ -1,11 +1,8 @@
-package com.example.nasamarsrovers.repository
+package com.example.data.repository
 
-import com.example.nasamarsrovers.di.IODispatcher
-import com.example.nasamarsrovers.repository.net.RoverQueryParameters
-import com.example.nasamarsrovers.repository.net.interfaces.RoverApi
-import com.example.nasamarsrovers.utils.DEFAULT_CAMERA
-import com.example.nasamarsrovers.utils.DEFAULT_DATE
-import com.example.nasamarsrovers.utils.DEFAULT_SOL
+import com.example.data.api.RoverApi
+import com.example.data.di.IODispatcher
+import com.example.data.model.RoverQueryParameters
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -79,5 +76,11 @@ class PhotosRepository @Inject constructor(
         return flow {
             emit(roverApi.getRoverManifest(roverName).photoManifest?.landingDate.orEmpty())
         }.flowOn(coroutineDispatcher)
+    }
+
+    companion object{
+        const val DEFAULT_CAMERA = "FHAZ"
+        const val DEFAULT_DATE = "2012-08-06"
+        const val DEFAULT_SOL = 0
     }
 }

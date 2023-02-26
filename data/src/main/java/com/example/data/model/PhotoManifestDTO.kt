@@ -1,8 +1,8 @@
-package com.example.domain.model
+package com.example.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class PhotoManifest(
+data class PhotoManifestDTO(
     @SerializedName("name")
     val name: String?,
     @SerializedName("landing_date")
@@ -18,5 +18,5 @@ data class PhotoManifest(
     @SerializedName("total_photos")
     val totalPhotos: Int?,
     @SerializedName("photos")
-    val photos: List<PhotoManifestItem>?
+    val photos: List<PhotoManifestItemDTO>?
 )

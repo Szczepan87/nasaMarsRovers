@@ -2,7 +2,7 @@ package com.example.nasamarsrovers.di
 
 import android.content.Context
 import com.example.nasamarsrovers.repository.net.NoInternetConnectionInterceptor
-import com.example.nasamarsrovers.repository.net.interfaces.RoverApi
+import com.example.data.api.RoverApi
 import com.example.nasamarsrovers.utils.BASE_URL
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
