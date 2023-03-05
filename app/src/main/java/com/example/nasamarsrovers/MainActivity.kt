@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -21,6 +22,7 @@ import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -40,13 +42,40 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = CURIOSITY
-        supportActionBar?.subtitle = "Camera: FHAZ"
+        supportActionBar?.subtitle = getString(R.string.camera_not_picked)
         setUpObservers()
     }
 
     private fun setUpObservers() {
         galleryViewModel.currentRover.observe(this) { supportActionBar?.title = it }
-        galleryViewModel.currentCamera.observe(this) { supportActionBar?.subtitle = "Camera: $it" }
+        galleryViewModel.currentCamera.observe(this) {
+            supportActionBar?.subtitle = String.format(
+                getString(R.string.camera_with_value),
+                it ?: getString(R.string.all_cameras)
+            )
+        }
+        galleryViewModel.currentSol.observe(this) {
+            drawerLayout.navView.menu[SOL_DRAWER_INDEX].title =
+                if (galleryViewModel.isEarthDateUsed.not()) {
+                    String.format(
+                        getString(R.string.sol),
+                        it ?: getString(R.string.value_not_selected)
+                    )
+                } else {
+                    getString(R.string.sol_not_picked)
+                }
+        }
+        galleryViewModel.currentEarthDate.observe(this) {
+            drawerLayout.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
+                if (galleryViewModel.isEarthDateUsed) {
+                    String.format(
+                        getString(R.string.earth_date),
+                        it ?: getString(R.string.value_not_selected)
+                    )
+                } else {
+                    getString(R.string.earth_date_not_picked)
+                }
+        }
     }
 
     private fun setUpNavView() {
@@ -61,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     private fun setUpMenuItems(navView: NavigationView, navController: NavController) {
         with(navView) {
             setupWithNavController(navController)
-            menu.getItem(0).isChecked = true
+            menu.getItem(CURIOSITY_DRAWER_INDEX).isChecked = true
             setNavigationItemSelectedListener {
                 return@setNavigationItemSelectedListener when (it.itemId) {
                     R.id.sol_drawer_item -> launchSolPicker()
@@ -95,21 +124,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchSolPicker(): Boolean {
-        SolPicker().show(supportFragmentManager, "SOL_PICKER")
+        SolPicker().show(supportFragmentManager, SOL_PICKER_TAG)
         closeDrawer()
         return true
     }
 
     private fun launchCameraPicker(): Boolean {
-        CameraPicker().show(supportFragmentManager, "CAMERA_PICKER")
+        CameraPicker().show(supportFragmentManager, CAMERA_PICKER_TAG)
         closeDrawer()
         return true
     }
 
     private fun launchDatePicker(): Boolean {
         val datePicker = DatePickerDialog()
-        datePicker.show(supportFragmentManager, "EARTH_DATE_DIALOG")
+        datePicker.show(supportFragmentManager, EARTH_DATE_PICKER_TAG)
         closeDrawer()
         return true
+    }
+
+    companion object {
+        const val SOL_PICKER_TAG = "SOL_PICKER"
+        const val CAMERA_PICKER_TAG = "CAMERA_PICKER"
+        const val EARTH_DATE_PICKER_TAG = "EARTH_DATE_DIALOG"
+        private const val CURIOSITY_DRAWER_INDEX = 0
+        private const val SOL_DRAWER_INDEX = 3
+        private const val EARTH_DATE_DRAWER_INDEX = 4
     }
 }

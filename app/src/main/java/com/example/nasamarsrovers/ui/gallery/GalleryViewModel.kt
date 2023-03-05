@@ -33,8 +33,8 @@ class GalleryViewModel @Inject constructor(
     private val _currentCamera = MutableLiveData<String?>()
     val currentCamera: LiveData<String?> = _currentCamera
 
-    private val _currentSol = MutableLiveData<Int>()
-    val currentSol: LiveData<Int> = _currentSol
+    private val _currentSol = MutableLiveData<Int?>()
+    val currentSol: LiveData<Int?> = _currentSol
 
     private val _currentEarthDate = MutableLiveData<String>()
     val currentEarthDate: LiveData<String> = _currentEarthDate
@@ -165,6 +165,7 @@ class GalleryViewModel @Inject constructor(
 
     fun setSol(solNo: Int) {
         _currentSol.postValue(solNo)
+        isEarthDateUsed = false
         shouldLoadNextPage = true
     }
 
@@ -179,6 +180,7 @@ class GalleryViewModel @Inject constructor(
 
     fun setEarthDate(date: String) {
         _currentEarthDate.postValue(date)
+        isEarthDateUsed = true
         shouldLoadNextPage = true
     }
 

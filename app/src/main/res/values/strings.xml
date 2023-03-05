@@ -6,7 +6,6 @@
     <string name="nav_header_subtitle">By Lukasz Szczepanski</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -14,11 +13,16 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="sol">Sol: %1$d</string>
+    <string name="sol_not_picked">Sol: not selected</string>
     <string name="earth_date">Earth date: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="earth_date_not_picked">Earth date: not picked</string>
     <string name="curiosity">Curiosity</string>
     <string name="opportunity">Opportunity</string>
     <string name="spirit">Spirit</string>
     <string name="camera">Camera</string>
+    <string name="camera_not_picked">Camera: ALL</string>
+    <string name="camera_with_value">Camera: %1$s</string>
     <string name="empty_list_info">No photos for this day, camera or rover</string>
+    <string name="value_not_selected">not selected</string>
+    <string name="all_cameras">ALL</string>
 </resources>
