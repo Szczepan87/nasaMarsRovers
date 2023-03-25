@@ -54,28 +54,36 @@ class MainActivity : AppCompatActivity() {
                 it ?: getString(R.string.all_cameras)
             )
         }
-        galleryViewModel.currentSol.observe(this) {
-            drawerLayout.navView.menu[SOL_DRAWER_INDEX].title =
-                if (galleryViewModel.isEarthDateUsed.not()) {
-                    String.format(
-                        getString(R.string.sol),
-                        it ?: getString(R.string.value_not_selected)
-                    )
-                } else {
+        galleryViewModel.currentSol.observe(this) { setSolDrawerText(it) }
+        galleryViewModel.currentEarthDate.observe(this) { setEarthDateDrawerText(it) }
+    }
+
+    private fun setEarthDateDrawerText(it: String?) {
+        drawerLayout.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
+            if (galleryViewModel.isEarthDateUsed) {
+                drawerLayout.navView.menu[SOL_DRAWER_INDEX].title =
                     getString(R.string.sol_not_picked)
-                }
-        }
-        galleryViewModel.currentEarthDate.observe(this) {
-            drawerLayout.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
-                if (galleryViewModel.isEarthDateUsed) {
-                    String.format(
-                        getString(R.string.earth_date),
-                        it ?: getString(R.string.value_not_selected)
-                    )
-                } else {
+                String.format(
+                    getString(R.string.earth_date),
+                    it ?: getString(R.string.value_not_selected)
+                )
+            } else {
+                getString(R.string.earth_date_not_picked)
+            }
+    }
+
+    private fun setSolDrawerText(sol: Int?) {
+        drawerLayout.navView.menu[SOL_DRAWER_INDEX].title =
+            if (galleryViewModel.isEarthDateUsed.not()) {
+                drawerLayout.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
                     getString(R.string.earth_date_not_picked)
-                }
-        }
+                String.format(
+                    getString(R.string.sol),
+                    sol ?: getString(R.string.value_not_selected)
+                )
+            } else {
+                getString(R.string.sol_not_picked)
+            }
     }
 
     private fun setUpNavView() {
