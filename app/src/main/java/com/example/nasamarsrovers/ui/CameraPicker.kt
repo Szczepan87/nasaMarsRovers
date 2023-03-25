@@ -16,13 +16,15 @@ class CameraPicker : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreate(savedInstanceState)
 
+        // TODO provide array that contains string res or enums
+
         val currentRover = galleryViewModel.currentRover.value
-        val cameraArray =
+        val cameraArray: Array<String> =
             if (currentRover == CURIOSITY || currentRover == null) resources.getStringArray(R.array.curiosity_cameras)
             else resources.getStringArray(R.array.spirit_and_opportunity_cameras)
 
         val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle("Select camera:")
+        builder.setTitle(getString(R.string.select_camera))
         builder.setItems(cameraArray) { dialog, which ->
             galleryViewModel.setCurrentCamera(cameraArray[which])
             dialog.dismiss()
