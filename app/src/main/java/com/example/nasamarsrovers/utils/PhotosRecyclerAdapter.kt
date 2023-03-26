@@ -31,13 +31,13 @@ class PhotosRecyclerAdapter(private val onItemCLick: ((String?) -> Unit)) :
     inner class PhotosViewHolder(private val binding: PhotoCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private var glideImageLoader: GlideImageLoader? = null
+        private val glideImageLoader: GlideImageLoader by lazy {
+            GlideImageLoader(binding.cardPhotoImageView, binding.cardPhotoProgressBar)
+        }
 
         fun bind(photo: Photo) {
             binding.photo = photo
-            glideImageLoader =
-                GlideImageLoader(binding.cardPhotoImageView, binding.cardPhotoProgressBar)
-            glideImageLoader?.load(photo.imgSrc.toString())
+            glideImageLoader.load(photo.imgSrc.toString())
             binding.photoCardLayout.setOnClickListener { onItemCLick.invoke(photo.imgSrc) }
         }
     }

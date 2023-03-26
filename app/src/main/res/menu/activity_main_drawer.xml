@@ -21,11 +21,11 @@
 
     <item
         android:id="@+id/sol_drawer_item"
-        android:title="@string/sol" />
+        android:title="@string/sol_not_picked" />
 
     <item
         android:id="@+id/date_drawer_item"
-        android:title="@string/earth_date" />
+        android:title="@string/earth_date_not_picked" />
 
     <item
         android:id="@+id/camera_drawer_item"
