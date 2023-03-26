@@ -26,4 +26,16 @@
     <string name="value_not_selected">not selected</string>
     <string name="select_camera">"Select camera:"</string>
     <string name="all_cameras">ALL</string>
+
+    <!--    rover's cameras-->
+    <string name="FHAZ">FHAZ</string>
+    <string name="RHAZ">RHAZ</string>
+    <string name="NAVCAM">NAVCAM</string>
+    <string name="PANCAM">PANCAM</string>
+    <string name="MINITES">MINITES</string>
+    <string name="ALL">ALL</string>
+    <string name="MAST">MAST</string>
+    <string name="CHEMCAM">CHEMCAM</string>
+    <string name="MAHLI">MAHLI</string>
+    <string name="MARDI">MARDI</string>
 </resources>
