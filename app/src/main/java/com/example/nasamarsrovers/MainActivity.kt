@@ -3,7 +3,6 @@ package com.example.nasamarsrovers
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
@@ -13,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.nasamarsrovers.databinding.ActivityMainBinding
 import com.example.nasamarsrovers.ui.CameraPicker
 import com.example.nasamarsrovers.ui.DatePickerDialog
 import com.example.nasamarsrovers.ui.SolPicker
@@ -22,7 +22,6 @@ import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -31,16 +30,18 @@ class MainActivity : AppCompatActivity() {
     private val galleryViewModel: GalleryViewModel by viewModels()
     private lateinit var drawerLayout: DrawerLayout
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUpToolbarBehaviour()
         setUpNavView()
     }
 
     private fun setUpToolbarBehaviour() {
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar.toolbar)
         supportActionBar?.title = CURIOSITY
         supportActionBar?.subtitle = getString(R.string.camera_not_picked)
         setUpObservers()
@@ -59,9 +60,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setEarthDateDrawerText(it: String?) {
-        drawerLayout.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
+        binding.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
             if (galleryViewModel.isEarthDateUsed) {
-                drawerLayout.navView.menu[SOL_DRAWER_INDEX].title =
+                binding.navView.menu[SOL_DRAWER_INDEX].title =
                     getString(R.string.sol_not_picked)
                 String.format(
                     getString(R.string.earth_date),
@@ -73,9 +74,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setSolDrawerText(sol: Int?) {
-        drawerLayout.navView.menu[SOL_DRAWER_INDEX].title =
+        binding.navView.menu[SOL_DRAWER_INDEX].title =
             if (galleryViewModel.isEarthDateUsed.not()) {
-                drawerLayout.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
+                binding.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
                     getString(R.string.earth_date_not_picked)
                 String.format(
                     getString(R.string.sol),
@@ -87,12 +88,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavView() {
-        val navView: NavigationView = findViewById(R.id.navView)
         val navController = findNavController(R.id.navHostFragment)
         drawerLayout = findViewById(R.id.drawer_layout)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.galleryFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
-        setUpMenuItems(navView, navController)
+        setUpMenuItems(binding.navView, navController)
     }
 
     private fun setUpMenuItems(navView: NavigationView, navController: NavController) {
