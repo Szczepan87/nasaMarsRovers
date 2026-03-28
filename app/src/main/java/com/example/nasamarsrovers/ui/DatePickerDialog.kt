@@ -1,9 +1,12 @@
 package com.example.nasamarsrovers.ui
 
-import android.app.DatePickerDialog
+import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.widget.DatePicker
+import android.view.ViewGroup
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
@@ -12,35 +15,55 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class DatePickerDialog :
-    DialogFragment(),
-    DatePickerDialog.OnDateSetListener {
+class DatePickerDialog : DialogFragment() {
 
     private val calendar = Calendar.getInstance()
     private val galleryViewModel: GalleryViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val maxStringDate = galleryViewModel.state.value.maxEarthDate
-        val maxYear = maxStringDate?.split("-")?.first()?.toInt()
-        val maxMonth = maxStringDate?.split("-")?.get(1)?.toInt()?.minus(1)
-        val maxDay = maxStringDate?.split("-")?.last()?.toInt()
+        val galleryState = galleryViewModel.state.value
 
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val maxDateCalendar = parseDateToCalendar(galleryState.maxEarthDate)
+        val minDateCalendar = parseDateToCalendar(galleryState.landingDate)
+        val selectedDateCalendar =
+            parseDateToCalendar(galleryState.currentEarthDate)
+                ?: maxDateCalendar
+                ?: Calendar.getInstance()
 
-        return DatePickerDialog(
-            requireActivity(),
-            this,
-            maxYear ?: year,
-            maxMonth ?: month,
-            maxDay ?: day
-        )
+        val composeView = ComposeView(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MaterialTheme {
+                    com.example.nasamarsrovers.ui.EarthDatePickerDialogContent(
+                        initialDateMillis = selectedDateCalendar.timeInMillis,
+                        minDateMillis = minDateCalendar?.timeInMillis,
+                        maxDateMillis = maxDateCalendar?.timeInMillis,
+                        onConfirm = { year: Int, month: Int, dayOfMonth: Int ->
+                            calendar.set(year, month, dayOfMonth)
+                            galleryViewModel.setEarthDate(DATE_FORMAT.format(calendar.time))
+                            dismiss()
+                        },
+                        onCancel = { dismiss() }
+                    )
+                }
+            }
+        }
+
+        return AlertDialog.Builder(requireActivity())
+            .setView(composeView)
+            .create()
     }
 
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        calendar.set(year, month, dayOfMonth)
+    private fun parseDateToCalendar(dateString: String?): Calendar? {
+        if (dateString.isNullOrBlank()) return null
+        val date = DATE_FORMAT.parse(dateString) ?: return null
 
-        galleryViewModel.setEarthDate(DATE_FORMAT.format(calendar.time))
+        return Calendar.getInstance().apply {
+            time = date
+        }
     }
 }
