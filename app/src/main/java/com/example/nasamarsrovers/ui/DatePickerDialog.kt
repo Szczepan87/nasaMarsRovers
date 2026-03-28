@@ -9,8 +9,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.DATE_FORMAT
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class DatePickerDialog :
     DialogFragment(),
     DatePickerDialog.OnDateSetListener {

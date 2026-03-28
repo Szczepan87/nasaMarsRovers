@@ -7,7 +7,7 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -88,8 +88,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavView() {
-        val navController = findNavController(R.id.navHostFragment)
-        drawerLayout = findViewById(R.id.drawer_layout)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        drawerLayout = binding.drawerLayout
         appBarConfiguration = AppBarConfiguration(setOf(R.id.galleryFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         setUpMenuItems(binding.navView, navController)
@@ -117,7 +118,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.navHostFragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navController = navHostFragment.navController
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 

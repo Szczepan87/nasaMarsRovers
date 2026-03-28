@@ -10,7 +10,9 @@ import com.example.nasamarsrovers.model.CuriosityCameras
 import com.example.nasamarsrovers.model.SpiritAndOpportunityCameras
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.CURIOSITY
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CameraPicker : DialogFragment() {
 
     private val galleryViewModel: GalleryViewModel by activityViewModels()

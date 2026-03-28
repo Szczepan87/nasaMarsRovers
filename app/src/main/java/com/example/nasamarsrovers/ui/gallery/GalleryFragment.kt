@@ -32,7 +32,6 @@ class GalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
-        setUpObservers()
         return binding.root
     }
 
@@ -40,6 +39,7 @@ class GalleryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setOnSwipeListener()
+        setUpObservers()
         galleryViewModel.loadFirstPage()
         with(binding) {
             lifecycleOwner = viewLifecycleOwner

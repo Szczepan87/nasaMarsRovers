@@ -14,7 +14,6 @@ import com.example.nasamarsrovers.databinding.FragmentPhotoBinding
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.OnSwipeTouchListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_photo.*
 
 @AndroidEntryPoint
 class PhotoFragment : Fragment() {
@@ -72,7 +71,7 @@ class PhotoFragment : Fragment() {
 
     private fun loadImage(imageUrl: String?) {
         imageUrl?.let {
-            Glide.with(this.requireContext()).load(it).into(photoTouchImageView)
+            Glide.with(this.requireContext()).load(it).into(binding.photoTouchImageView)
         }
     }
 }
