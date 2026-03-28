@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -33,15 +36,27 @@ class SolPicker : DialogFragment() {
         val galleryState = galleryViewModel.state.value
         with(binding) {
             state = galleryState
-            with(solNumberPicker) {
-                minValue = 0
-                maxValue = galleryState.maxSolForRover
+            solPickerDialogLayout.removeAllViews()
+            val composeView = ComposeView(requireContext()).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                setContent {
+                    MaterialTheme {
+                        SolPickerDialogContent(
+                            state = galleryState,
+                            onConfirm = { sol ->
+                                galleryViewModel.setSol(sol)
+                                this@SolPicker.dismiss()
+                            },
+                            onCancel = { this@SolPicker.dismiss() }
+                        )
+                    }
+                }
             }
-            solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
-            solDialogOkButton.setOnClickListener {
-                galleryViewModel.setSol(solNumberPicker.value)
-                this@SolPicker.dismiss()
-            }
+            solPickerDialogLayout.addView(composeView)
         }
     }
 }
