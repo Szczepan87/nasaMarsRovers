@@ -20,14 +20,14 @@ class CameraPicker : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreate(savedInstanceState)
 
-        val currentRover = galleryViewModel.currentRover.value
+        val currentRover = galleryViewModel.state.value.currentRover
         val cameraArray: Array<String> =
-            if (currentRover == CURIOSITY || currentRover == null) {
-                CuriosityCameras.values()
+            if (currentRover == CURIOSITY) {
+                CuriosityCameras.entries
                     .map { resources.getString(it.resId) }
                     .toTypedArray()
             } else {
-                SpiritAndOpportunityCameras.values()
+                SpiritAndOpportunityCameras.entries
                     .map { resources.getString(it.resId) }
                     .toTypedArray()
             }

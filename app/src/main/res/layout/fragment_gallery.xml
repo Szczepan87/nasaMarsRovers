@@ -5,11 +5,9 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
-            name="viewModel"
-            type="com.example.nasamarsrovers.ui.gallery.GalleryViewModel" />
+            name="state"
+            type="com.example.nasamarsrovers.ui.gallery.GalleryState" />
     </data>
 
     <FrameLayout
@@ -36,14 +34,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/empty_list_info"
-            app:visible="@{safeUnbox(viewModel.isListEmpty)}" />
+            app:visible="@{safeUnbox(state.isListEmpty)}" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorDisabledBackground"
-            android:clickable="@{safeUnbox(viewModel.isLoading)}"
-            app:visible="@{safeUnbox(viewModel.isLoading)}">
+            android:clickable="@{safeUnbox(state.isLoading)}"
+            app:visible="@{safeUnbox(state.isLoading)}">
 
             <ProgressBar
                 android:id="@+id/galleryProgressBar"

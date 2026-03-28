@@ -1,7 +1,6 @@
 package com.example.nasamarsrovers.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,19 +30,16 @@ class SolPicker : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val galleryState = galleryViewModel.state.value
         with(binding) {
-            viewModel = galleryViewModel
+            state = galleryState
             with(solNumberPicker) {
                 minValue = 0
-                maxValue = galleryViewModel.maxSolForRover.value ?: 0
+                maxValue = galleryState.maxSolForRover
             }
             solDialogCancelButton.setOnClickListener { this@SolPicker.dismiss() }
             solDialogOkButton.setOnClickListener {
-                galleryViewModel.isEarthDateUsed = false
-                Log.d("SOL PICKER", "EARTH DATE USED: ${galleryViewModel.isEarthDateUsed}")
-                galleryViewModel.setSol(
-                    solNumberPicker.value
-                )
+                galleryViewModel.setSol(solNumberPicker.value)
                 this@SolPicker.dismiss()
             }
         }

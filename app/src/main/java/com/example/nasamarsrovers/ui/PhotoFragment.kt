@@ -54,19 +54,21 @@ class PhotoFragment : Fragment() {
     }
 
     private fun getCurrentlyDisplayedImageIndex(): Int {
-        return galleryViewModel.listOfPhotos.value?.indexOfFirst { it.imgSrc == url } ?: 0
+        return galleryViewModel.state.value.listOfPhotos.indexOfFirst { it.imgSrc == url }
     }
 
     private fun getPreviousImageUrl() {
-        val list = galleryViewModel.listOfPhotos.value ?: return
+        val list = galleryViewModel.state.value.listOfPhotos
         val index = getCurrentlyDisplayedImageIndex()
-        url = if (index > 0) list[index.minus(1)].imgSrc else return
+        if (index <= 0) return
+        url = list[index - 1].imgSrc
     }
 
     private fun getNextImageUrl() {
-        val list = galleryViewModel.listOfPhotos.value ?: return
+        val list = galleryViewModel.state.value.listOfPhotos
         val index = getCurrentlyDisplayedImageIndex()
-        url = if (index < (list.size).plus(1)) list[index.plus(1)].imgSrc else return
+        if (index == -1 || index >= list.lastIndex) return
+        url = list[index + 1].imgSrc
     }
 
     private fun loadImage(imageUrl: String?) {

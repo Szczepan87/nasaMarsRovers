@@ -9,6 +9,9 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +21,8 @@ import com.example.nasamarsrovers.databinding.FragmentGalleryBinding
 import com.example.nasamarsrovers.utils.OnSwipeTouchListener
 import com.example.nasamarsrovers.utils.PhotosRecyclerAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class GalleryFragment : Fragment() {
@@ -38,31 +42,27 @@ class GalleryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setOnSwipeListener()
-        setUpObservers()
-        galleryViewModel.loadFirstPage()
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = galleryViewModel
             galleryRecycler.adapter = galleryRecyclerAdapter
             setOverscrollListener()
         }
+        setOnSwipeListener()
+        collectUi()
     }
 
-    @ExperimentalCoroutinesApi
     private fun FragmentGalleryBinding.setOverscrollListener() {
         val layoutManager: LinearLayoutManager =
             galleryRecycler.layoutManager as? LinearLayoutManager ?: return
-        val adapter = galleryRecycler.adapter
         galleryRecycler.addOnScrollListener(object : OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val position = layoutManager.findLastVisibleItemPosition()
-                val items = adapter?.itemCount ?: 0
+                val items = galleryRecyclerAdapter.itemCount
 
-                if (position >= items.dec()) {
-                    viewModel?.loadNextPage()
+                if (items > 0 && position >= items.dec()) {
+                    galleryViewModel.loadNextPage()
                 }
             }
         })
@@ -73,26 +73,24 @@ class GalleryFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    @ExperimentalCoroutinesApi
-    private fun setUpObservers() {
-        galleryViewModel.listOfPhotos.observe(viewLifecycleOwner) {
-            galleryRecyclerAdapter.submitList(it)
-        }
-        galleryViewModel.currentSol.observe(viewLifecycleOwner) {
-            galleryViewModel.loadFirstPage()
-        }
-        galleryViewModel.currentEarthDate.observe(viewLifecycleOwner) {
-            galleryViewModel.loadFirstPage()
-        }
-        galleryViewModel.currentRover.observe(viewLifecycleOwner) {
-            galleryViewModel.loadFirstPage()
-        }
-        galleryViewModel.currentCamera.observe(viewLifecycleOwner) {
-            galleryViewModel.loadFirstPage()
-        }
-        galleryViewModel.repositoryError.observe(viewLifecycleOwner) {
-            if (it != null) {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+    private fun collectUi() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    galleryViewModel.state.collectLatest { state ->
+                        binding.state = state
+                        galleryRecyclerAdapter.submitList(state.listOfPhotos)
+                    }
+                }
+                launch {
+                    galleryViewModel.events.collectLatest { event ->
+                        when (event) {
+                            is GalleryEvent.ShowError -> {
+                                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -101,12 +99,12 @@ class GalleryFragment : Fragment() {
     private fun setOnSwipeListener() {
         binding.galleryRecycler.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
             override fun onSwipeRight() {
-                if (galleryViewModel.isEarthDateUsed) galleryViewModel.previousEarthDate()
+                if (galleryViewModel.state.value.isEarthDateUsed) galleryViewModel.previousEarthDate()
                 else galleryViewModel.decreaseSolByOne()
             }
 
             override fun onSwipeLeft() {
-                if (galleryViewModel.isEarthDateUsed) galleryViewModel.nextEarthDay()
+                if (galleryViewModel.state.value.isEarthDateUsed) galleryViewModel.nextEarthDay()
                 else galleryViewModel.increaseSolByOne()
             }
         })

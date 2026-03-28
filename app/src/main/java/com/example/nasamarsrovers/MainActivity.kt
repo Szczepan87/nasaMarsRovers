@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,12 +19,15 @@ import com.example.nasamarsrovers.databinding.ActivityMainBinding
 import com.example.nasamarsrovers.ui.CameraPicker
 import com.example.nasamarsrovers.ui.DatePickerDialog
 import com.example.nasamarsrovers.ui.SolPicker
+import com.example.nasamarsrovers.ui.gallery.GalleryState
 import com.example.nasamarsrovers.ui.gallery.GalleryViewModel
 import com.example.nasamarsrovers.utils.CURIOSITY
 import com.example.nasamarsrovers.utils.OPPORTUNITY
 import com.example.nasamarsrovers.utils.SPIRIT
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -44,43 +50,47 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar.toolbar)
         supportActionBar?.title = CURIOSITY
         supportActionBar?.subtitle = getString(R.string.camera_not_picked)
-        setUpObservers()
+        collectUiState()
     }
 
-    private fun setUpObservers() {
-        galleryViewModel.currentRover.observe(this) { supportActionBar?.title = it }
-        galleryViewModel.currentCamera.observe(this) {
-            supportActionBar?.subtitle = String.format(
-                getString(R.string.camera_with_value),
-                it ?: getString(R.string.all_cameras)
-            )
+    private fun collectUiState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                galleryViewModel.state.collectLatest { state ->
+                    supportActionBar?.title = state.currentRover
+                    supportActionBar?.subtitle = getString(
+                        R.string.camera_with_value,
+                        state.currentCamera ?: getString(R.string.all_cameras)
+                    )
+                    setSolDrawerText(state)
+                    setEarthDateDrawerText(state)
+                }
+            }
         }
-        galleryViewModel.currentSol.observe(this) { setSolDrawerText(it) }
-        galleryViewModel.currentEarthDate.observe(this) { setEarthDateDrawerText(it) }
     }
 
-    private fun setEarthDateDrawerText(it: String?) {
+    private fun setEarthDateDrawerText(state: GalleryState) {
         binding.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
-            if (galleryViewModel.isEarthDateUsed) {
+            if (state.isEarthDateUsed) {
                 binding.navView.menu[SOL_DRAWER_INDEX].title =
                     getString(R.string.sol_not_picked)
-                String.format(
-                    getString(R.string.earth_date),
-                    it ?: getString(R.string.value_not_selected)
+                getString(
+                    R.string.earth_date,
+                    state.currentEarthDate ?: getString(R.string.value_not_selected)
                 )
             } else {
                 getString(R.string.earth_date_not_picked)
             }
     }
 
-    private fun setSolDrawerText(sol: Int?) {
+    private fun setSolDrawerText(state: GalleryState) {
         binding.navView.menu[SOL_DRAWER_INDEX].title =
-            if (galleryViewModel.isEarthDateUsed.not()) {
+            if (state.isEarthDateUsed.not()) {
                 binding.navView.menu[EARTH_DATE_DRAWER_INDEX].title =
                     getString(R.string.earth_date_not_picked)
-                String.format(
-                    getString(R.string.sol),
-                    sol ?: getString(R.string.value_not_selected)
+                getString(
+                    R.string.sol,
+                    state.currentSol ?: getString(R.string.value_not_selected)
                 )
             } else {
                 getString(R.string.sol_not_picked)
@@ -99,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     private fun setUpMenuItems(navView: NavigationView, navController: NavController) {
         with(navView) {
             setupWithNavController(navController)
-            menu.getItem(CURIOSITY_DRAWER_INDEX).isChecked = true
+            menu[CURIOSITY_DRAWER_INDEX].isChecked = true
             setNavigationItemSelectedListener {
                 return@setNavigationItemSelectedListener when (it.itemId) {
                     R.id.sol_drawer_item -> launchSolPicker()
