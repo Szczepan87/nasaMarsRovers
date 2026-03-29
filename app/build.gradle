@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
@@ -31,8 +30,6 @@ android {
 
     buildFeatures {
         compose true
-        viewBinding true
-        dataBinding true
     }
 
     compileOptions {
@@ -73,8 +70,7 @@ dependencies {
     ksp libs.hilt.android.compiler
 
     //navigation
-    implementation libs.navigation.fragment.ktx
-    implementation libs.navigation.ui.ktx
+    implementation libs.navigation.compose
 
     // Glide
     implementation libs.glide

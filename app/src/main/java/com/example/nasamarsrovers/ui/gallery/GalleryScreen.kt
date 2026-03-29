@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nasamarsrovers.R
+import com.example.nasamarsrovers.ui.theme.NasaMarsRoversTheme.disabledBackground
 
 @Composable
 fun GalleryScreen(
@@ -112,7 +113,7 @@ fun GalleryScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.LightGray.copy(alpha = 0.5f))
+                    .background(MaterialTheme.colors.disabledBackground)
             ) {
                 CircularProgressIndicator()
             }
@@ -147,4 +148,3 @@ private fun GalleryScreenLoadingPreview() {
         )
     }
 }
-
