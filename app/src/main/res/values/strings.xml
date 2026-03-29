@@ -10,6 +10,7 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="sol_dialog_title">Select sol:</string>
+    <string name="select_earth_date">Select earth date:</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="sol">Sol: %1$s</string>
